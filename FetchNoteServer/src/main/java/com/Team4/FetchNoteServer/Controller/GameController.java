@@ -84,7 +84,7 @@ public class GameController {
 
             try {
                 // dummy data : image send test
-                BufferedImage originalImage = ImageIO.read(new File("resources/test_image.png"));
+                BufferedImage originalImage = ImageIO.read(new File("/Users/gimchan-ug/Desktop/codestates/FetchNote/FetchNoteServer/src/main/resources/image/test_image.png"));
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ImageIO.write(originalImage, "png", baos);
                 String image = Arrays.toString(baos.toByteArray());
@@ -108,7 +108,7 @@ public class GameController {
     public ResponseEntity<?> SubscribeGamesList(@RequestHeader Map<String, String> header,
                                                 @RequestBody LikeGameDTO gameId){
         //유저 검증 코드
-        long userId = 5L;
+        long userId = 1L;
         //UserService.token
 
         try {

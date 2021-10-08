@@ -2,7 +2,6 @@ package com.Team4.FetchNoteServer.Service;
 
 import com.Team4.FetchNoteServer.Domain.CommentInput;
 import com.Team4.FetchNoteServer.Domain.UserSignUp;
-import com.Team4.FetchNoteServer.Entity.Comment;
 import com.Team4.FetchNoteServer.Entity.PatchComment;
 import com.Team4.FetchNoteServer.Entity.User;
 import com.Team4.FetchNoteServer.Repository.CommentRepository;

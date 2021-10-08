@@ -1,9 +1,5 @@
 package com.Team4.FetchNoteServer.Entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 import java.sql.Blob;
 import java.util.ArrayList;
