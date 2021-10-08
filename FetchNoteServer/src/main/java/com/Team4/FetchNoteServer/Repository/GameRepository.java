@@ -1,6 +1,5 @@
 package com.Team4.FetchNoteServer.Repository;
 
-import com.Team4.FetchNoteServer.Domain.GameDTO;
 import com.Team4.FetchNoteServer.Entity.Game;
 import com.Team4.FetchNoteServer.Entity.LikeGame;
 import com.Team4.FetchNoteServer.Entity.User;
@@ -33,11 +32,31 @@ public class GameRepository {
         List<Game> result = new ArrayList<>();
 
         List<LikeGame> likeGame = entityManager
-                .createQuery("SELECT games FROM LikeGame games WHERE user_id =" + id + "",LikeGame.class)
+                .createQuery("SELECT el FROM LikeGame el WHERE user_id =" + id + "",LikeGame.class)
                 .getResultList();
 
         for(LikeGame el : likeGame) result.add(el.getGame());
 
         return result;
+    }
+
+    public void SubGameModify(User user, Game game) {
+        List<LikeGame> likeGames = entityManager
+                .createQuery("SELECT el FROM LikeGame el " +
+                             "WHERE user_id =" + user.getId() + " AND game_id =" + game.getId() + "", LikeGame.class)
+                .getResultList();
+
+        if(likeGames.size() != 0){
+            LikeGame likeGame = likeGames.get(0);
+            entityManager.remove(likeGame);
+        } else {
+            LikeGame likeGame = new LikeGame();
+            likeGame.setGame(game);
+            likeGame.setUser(user);
+            entityManager.persist(likeGame);
+        }
+
+        entityManager.flush();
+        entityManager.close();
     }
 }

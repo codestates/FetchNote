@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GameDTO {
-    private String name;
-    private String image;
+public class LikeGameDTO {
+    private long userId;
+    private long gameId;
 
-    public GameDTO() {}
+    public LikeGameDTO() {}
 }

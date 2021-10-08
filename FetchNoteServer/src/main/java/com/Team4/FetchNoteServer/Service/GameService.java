@@ -1,6 +1,7 @@
 package com.Team4.FetchNoteServer.Service;
 
 import com.Team4.FetchNoteServer.Entity.Game;
+import com.Team4.FetchNoteServer.Entity.User;
 import com.Team4.FetchNoteServer.Repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,9 @@ public class GameService {
 
     public List<Game> GetGameByUserId (long id){
         return gameRepository.FindByUserId(id);
+    }
+
+    public void SubscribeGame(User user, Game game) {
+        gameRepository.SubGameModify(user, game);
     }
 }
