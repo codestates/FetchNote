@@ -6,7 +6,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Blob;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Patches {
@@ -46,6 +48,17 @@ public class Patches {
     @Column(nullable = false, name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @OneToMany(mappedBy = "patches")
+    private List<PatchComment> comments = new ArrayList<>();
+
+    public List<PatchComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<PatchComment> comments) {
+        this.comments = comments;
+    }
 
     public Patches() {}
 
