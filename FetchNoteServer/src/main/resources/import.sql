@@ -1,0 +1,1 @@
+INSERT INTO user (id, email, nickname, exp) VALUES (13, "ruby.kim@codestates.com", "피바다", 0);
