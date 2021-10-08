@@ -2,13 +2,13 @@ package com.Team4.FetchNoteServer.Entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 public class User {
-    // id, user_name, password, email, phone, nick_name, created_at
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
@@ -20,14 +20,16 @@ public class User {
     @Column(nullable = false)
     private int exp = 0;
 
-    @OneToMany(mappedBy = "users")
-    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<PatchComment> comments = new ArrayList<>();
 
-    public List<Comment> getComments() {
+    public User() {}
+    
+    public List<PatchComment> getComments() {
         return comments;
     }
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(List<PatchComment> comments) {
         this.comments = comments;
     }
 
