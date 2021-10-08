@@ -11,9 +11,9 @@ public class PatchComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(targetEntity = Patch.class)
+    @ManyToOne(targetEntity = Patches.class)
     @JoinColumn(name = "patch_id")
-    private Patch patch;
+    private Patches patches;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id")
@@ -40,12 +40,12 @@ public class PatchComment {
         this.id = id;
     }
 
-    public Patch getPatch() {
-        return patch;
+    public Patches getPatch() {
+        return patches;
     }
 
-    public void setPatch(Patch patch) {
-        this.patch = patch;
+    public void setPatch(Patches patches) {
+        this.patches = patches;
     }
 
     public User getUser() {

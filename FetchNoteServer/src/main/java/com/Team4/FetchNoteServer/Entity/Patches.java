@@ -9,7 +9,7 @@ import java.sql.Blob;
 import java.util.Date;
 
 @Entity
-public class Patch {
+public class Patches {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +47,7 @@ public class Patch {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-    public Patch() {}
+    public Patches() {}
 
     public long getId() {
         return id;
