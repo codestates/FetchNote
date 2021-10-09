@@ -32,10 +32,10 @@ public class Patches {
     private Blob image;
 
     @Column(nullable = false)
-    private int right;
+    private int right = 0;
 
     @Column(nullable = false)
-    private int wrong;
+    private int wrong = 0;
 
     @Column(nullable = false, name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
