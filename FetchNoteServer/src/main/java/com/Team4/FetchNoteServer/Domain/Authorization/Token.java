@@ -1,4 +1,4 @@
-package com.Team4.FetchNoteServer.Domain.Data;
+package com.Team4.FetchNoteServer.Domain.Authorization;
 
 import lombok.Getter;
 import lombok.Setter;

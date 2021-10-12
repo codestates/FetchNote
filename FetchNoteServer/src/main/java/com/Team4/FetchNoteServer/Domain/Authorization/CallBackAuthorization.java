@@ -5,7 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CallBackToken {
+public class CallBackAuthorization {
 
-    private String accessToken;
+    private String authorizationCode;
+
 }

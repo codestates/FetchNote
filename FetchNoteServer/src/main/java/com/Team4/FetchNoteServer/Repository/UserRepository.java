@@ -1,6 +1,7 @@
 package com.Team4.FetchNoteServer.Repository;
 
 import com.Team4.FetchNoteServer.Domain.UserSignUp;
+import com.Team4.FetchNoteServer.Entity.OAuthCode;
 import com.Team4.FetchNoteServer.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -52,5 +53,9 @@ public class UserRepository {
 
         entityManager.flush();
         entityManager.close();
+    }
+
+    public OAuthCode FindUserOAuthCode(){
+        return entityManager.find(OAuthCode.class, 0L);
     }
 }

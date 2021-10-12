@@ -1,4 +1,6 @@
 --Test Dummy Data
+-- oauth code(by jogiyo)
+INSERT INTO oauth_code (id, client_id) VALUES(0, "b1439c1ca8b3431678a1c6cc28df99c6");
 
 --user
 INSERT INTO `user` (id, email, nickname, exp) VALUES (1, "kimcoding@code.states", "김코딩", 150);
