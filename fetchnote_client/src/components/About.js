@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import "../css/Introduce.css"
+import "../css/About.css"
 
-function Introduce(){
+function About(){
     return(
         <div className="IntroducPage">
             <header>
@@ -37,4 +37,4 @@ function Introduce(){
     )
 }
 
-export default Introduce;
+export default About;

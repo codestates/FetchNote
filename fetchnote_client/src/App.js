@@ -4,9 +4,9 @@ import './css/App.css';
 import { useEffect, useState } from "react";
 import Main from "./components/Main"
 import dotenv from "dotenv";
-import Introduce from "./components/Introduce.js";
-import SubMain from "./components/SubMain.js";
+import About from "./components/About.js";
 import EditePatch from "./components/EditePatch.js";
+import Fetch from "./components/Fetch.js";
 
 function App() {
   const [userInfo, setUserInfo] = useState(true);
@@ -22,12 +22,12 @@ function App() {
               userInfo ? (
                 <Main></Main>
               ) : (
-              <Introduce></Introduce>
+              <About/>
               )
             }
           </Route>
           <Route exact path="/patch">
-            <SubMain></SubMain>
+            <Fetch/>
           </Route>
           <Route exact path="/write">
             <EditePatch/>

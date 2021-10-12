@@ -1,9 +1,9 @@
 import PatchnoteBlock from "./PatchnoteBlock";
 import Sidebar from "./Sidebar"
-import "../css/SubMain.css"
+import "../css/Retch.css"
 import { Link } from "react-router-dom";
 
-function SubMain(){
+function Fetch(){
     return(
         <div>
             <Sidebar></Sidebar>
@@ -25,4 +25,4 @@ function SubMain(){
     )
 }
 
-export default SubMain;
+export default Fetch;
