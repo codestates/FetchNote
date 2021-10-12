@@ -48,6 +48,12 @@ public class CheckedPatchRepository {
             boolean expChange = false;
 
             if(str.contains("right")) {
+                if(!checkedPatch.isRight() && !checkedPatch.isWrong()){
+                    patches.setRight(patches.getRight() + 1);
+                } else if(checkedPatch.isWrong()){
+                    patches.setRight(patches.getRight() + 1);
+                    patches.setWrong(patches.getWrong() - 1);
+                }
                 checkedPatch.setRight(true);
                 checkedPatch.setWrong(false);
                 if(!checkedPatch.isFirst()) {
@@ -55,6 +61,12 @@ public class CheckedPatchRepository {
                     expChange = true;
                 }
             } else if(str.contains("wrong")) {
+                if(!checkedPatch.isRight() && !checkedPatch.isWrong()){
+                    patches.setWrong(patches.getWrong() + 1);
+                } else if(checkedPatch.isRight()){
+                    patches.setRight(patches.getRight() - 1);
+                    patches.setWrong(patches.getWrong() + 1);
+                }
                 checkedPatch.setRight(false);
                 checkedPatch.setWrong(true);
                 if(!checkedPatch.isFirst()) {
@@ -62,6 +74,8 @@ public class CheckedPatchRepository {
                     expChange = true;
                 }
             } else {
+                if(checkedPatch.isRight()) patches.setRight(patches.getRight() - 1);
+                else if(checkedPatch.isWrong()) patches.setWrong(patches.getWrong() - 1);
                 checkedPatch.setRight(false);
                 checkedPatch.setWrong(false);
             }
@@ -69,6 +83,7 @@ public class CheckedPatchRepository {
 
             if(expChange) entityManager.persist(anotherUser);
 
+            entityManager.persist(patches);
             entityManager.persist(checkedPatch);
             entityManager.flush();
             entityManager.close();

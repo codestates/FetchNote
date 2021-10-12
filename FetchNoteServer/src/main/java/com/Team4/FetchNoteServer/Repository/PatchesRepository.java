@@ -33,7 +33,7 @@ public class PatchesRepository {
                 .getSingleResult();
     }
 
-    public void RegistPatches (User user, Game game, PatchesDTO data){
+    public Patches RegistPatches (User user, Game game, PatchesDTO data){
         Patches patches = new Patches();
 
         patches.setUser(user);
@@ -49,6 +49,7 @@ public class PatchesRepository {
         entityManager.persist(patches);
         entityManager.flush();
         entityManager.close();
+        return patches;
     }
 
     public void RemovePatches (Patches patches) {
