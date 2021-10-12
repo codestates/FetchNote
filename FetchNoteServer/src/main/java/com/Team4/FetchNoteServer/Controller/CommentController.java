@@ -1,10 +1,7 @@
 package com.Team4.FetchNoteServer.Controller;
 
-import com.Team4.FetchNoteServer.Domain.CommentInput;
-import com.Team4.FetchNoteServer.Entity.User;
-import com.Team4.FetchNoteServer.Repository.CommentRepository;
+import com.Team4.FetchNoteServer.Domain.CommentInputDTO;
 import com.Team4.FetchNoteServer.Service.CommentService;
-import com.Team4.FetchNoteServer.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +19,10 @@ public class CommentController {
     }
     // 새로운 코멘트를 작성하는 http메소드 매핑
     @PostMapping(value = "/comment")
-    public ResponseEntity<?> AddComment(@RequestBody CommentInput commentInput) {
+    public ResponseEntity<?> AddComment(@RequestBody CommentInputDTO commentInputDTO) {
         boolean flag = true;
-        if(commentInput.getPatchId() == null || commentInput.getUserId() == null
-        || commentInput.getComment() == null) flag = false;
+        if(commentInputDTO.getPatchId() == null || commentInputDTO.getUserId() == null
+        || commentInputDTO.getComment() == null) flag = false;
         // commentInput 객체 내에 기입하지 않은 경우
         if(!flag) {
             return ResponseEntity.badRequest().body(new HashMap<>(){{
@@ -33,7 +30,7 @@ public class CommentController {
             }});
         }
 
-        commentService.CreateCommentData(commentInput);
+        commentService.CreateCommentData(commentInputDTO);
         return ResponseEntity.ok().body(new HashMap<>() {{
             put("message", "OK");
         }});
@@ -52,15 +49,15 @@ public class CommentController {
 
     // 해당 코멘트에 대한 수정은 진행하는 http메소드 매핑
     @PatchMapping(value = "/comment")
-    public ResponseEntity<?> ModifyComment(@RequestParam(value = "commentId") Long id, @RequestBody CommentInput commentInput) {
-        String res = commentService.ModifyCommentData(id, commentInput);
+    public ResponseEntity<?> ModifyComment(@RequestParam(value = "commentId") Long id, @RequestBody CommentInputDTO commentInputDTO) {
+        String res = commentService.ModifyCommentData(id, commentInputDTO);
         if(res.equals("not found")) return ResponseEntity.status(404).body(new HashMap<>() {{
             put("message", "Not found comment");
         }});
         else if(res.equals("same")) return ResponseEntity.badRequest().body(new HashMap<>() {{
             put("message", "invalid userId or patchId");
         }});
-        else return ResponseEntity.status(404).body(new HashMap<>() {{
+        else return ResponseEntity.ok().body(new HashMap<>() {{
             put("message", "OK");
         }});
     }

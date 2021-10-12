@@ -1,5 +1,4 @@
 --Test Dummy Data
-
 --user
 INSERT INTO `user` (id, email, nickname, exp) VALUES (1, "kimcoding@code.states", "김코딩", 150);
 INSERT INTO `user` (id, email, nickname, exp) VALUES (2, "parkhacker@code.states", "박해커", 1000);

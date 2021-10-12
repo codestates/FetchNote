@@ -1,6 +1,6 @@
 package com.Team4.FetchNoteServer.Domain;
 
-public class UserSignUp {
+public class UserSignUpDTO {
     private String email;
     private String nickname;
 
