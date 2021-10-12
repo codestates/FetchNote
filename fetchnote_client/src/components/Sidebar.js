@@ -17,7 +17,6 @@ function Sidebar(){
                 레벨
                 메인 페이지 가는 건 
                 선호게임들 리스트*/}
-            <input className="sideBarBtn" type="checkbox"></input>
             <ul className="navigationBar_list">
                 <li className="navigationBar_list_elements logo">
                     <Link to="/">

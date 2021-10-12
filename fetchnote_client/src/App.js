@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import Main from "./components/Main"
 import dotenv from "dotenv";
 import Introduce from "./components/Introduce.js";
+import SubMain from "./components/SubMain.js";
+import EditePatch from "./components/EditePatch.js";
 
 function App() {
   const [userInfo, setUserInfo] = useState(true);
@@ -23,6 +25,12 @@ function App() {
               <Introduce></Introduce>
               )
             }
+          </Route>
+          <Route exact path="/patch">
+            <SubMain></SubMain>
+          </Route>
+          <Route exact path="/write">
+            <EditePatch/>
           </Route>
         </Switch>
       </BrowserRouter>
