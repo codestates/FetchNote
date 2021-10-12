@@ -28,7 +28,7 @@ public class PatchesService {
         return patchesRepository.FindByPatchesId(patchesId);
     }
 
-    public void RegisterPatches (User user, Game game, PatchesDTO data){
-        patchesRepository.RegistPatches(user, game, data);
+    public Patches RegisterPatches (User user, Game game, PatchesDTO data){
+        return patchesRepository.RegistPatches(user, game, data);
     }
 }

@@ -126,7 +126,8 @@ public class PatchesController {
                 );
             }
 
-            patchesService.RegisterPatches(user, game, data);
+            Patches patches = patchesService.RegisterPatches(user, game, data);
+            checkedPatchRepository.AddCheckedPatch(patches, userId);
 
             return ResponseEntity.ok().body(messageOk);
         } catch (IllegalArgumentException | NullPointerException e) {
@@ -140,14 +141,19 @@ public class PatchesController {
 
         //유저 검증
         long userId = 2L;
-        Patches patches = entityManager.find(Patches.class, data.getPatchesId());
-        if(patches.getUser().getId() == userId){
-            patchesRepository.RemovePatches(patches);
-            return ResponseEntity.ok().body(messageOk);
-        } else {
-            return ResponseEntity.badRequest().body(
-                    new HashMap<>(){{put("message", "Invalid User");}}
-            );
+
+        try {
+            Patches patches = entityManager.find(Patches.class, data.getPatchesId());
+            if(patches.getUser().getId() == userId){
+                patchesRepository.RemovePatches(patches);
+                return ResponseEntity.ok().body(messageOk);
+            } else {
+                return ResponseEntity.badRequest().body(
+                        new HashMap<>(){{put("message", "Invalid User");}}
+                );
+            }
+        } catch (NullPointerException | IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e);
         }
     }
 
@@ -160,14 +166,18 @@ public class PatchesController {
 
         //유저 검증
         long userId = 2L;
-        Patches patches = entityManager.find(Patches.class, patchesId);
-        if(patches.getUser().getId() == userId){
-            patchesRepository.UpdatePatches(patches, data);
-            return ResponseEntity.ok().body(messageOk);
-        } else {
-            return ResponseEntity.badRequest().body(
-                    new HashMap<>(){{put("message", "Invalid User");}}
-            );
+        try {
+            Patches patches = entityManager.find(Patches.class, patchesId);
+            if(patches.getUser().getId() == userId){
+                patchesRepository.UpdatePatches(patches, data);
+                return ResponseEntity.ok().body(messageOk);
+            } else {
+                return ResponseEntity.badRequest().body(
+                        new HashMap<>(){{put("message", "Invalid User");}}
+                );
+            }
+        } catch (NullPointerException | IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e);
         }
     }
 
@@ -189,7 +199,7 @@ public class PatchesController {
             }
             checkedPatchRepository.RatingPatches(patches, user, rating);
             return ResponseEntity.ok().body(messageOk);
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e);
         }
     }
