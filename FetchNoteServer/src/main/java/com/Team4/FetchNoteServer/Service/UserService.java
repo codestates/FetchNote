@@ -1,8 +1,8 @@
 package com.Team4.FetchNoteServer.Service;
 
-import com.Team4.FetchNoteServer.Domain.UserLogin;
-import com.Team4.FetchNoteServer.Domain.UserSignUp;
-import com.Team4.FetchNoteServer.Entity.OAuthCode;
+import com.Team4.FetchNoteServer.Domain.UserChangeInfoDTO;
+import com.Team4.FetchNoteServer.Domain.UserLoginDTO;
+import com.Team4.FetchNoteServer.Domain.UserSignUpDTO;
 import com.Team4.FetchNoteServer.Entity.User;
 import com.Team4.FetchNoteServer.Repository.UserRepository;
 import com.google.gson.JsonElement;
@@ -10,106 +10,46 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import io.jsonwebtoken.*;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.Duration;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserService {
-    private static long GET_ID = 0L;
     private final static String SIGN_KEY = "givemeajob";
     private final UserRepository userRepository;
 
     @Autowired
     public UserService(UserRepository userRepository) {this.userRepository = userRepository;}
 
-    public User FindUserData(UserLogin userLogin) {
-        List<User> user = userRepository.FindByEmail(userLogin.getEmail());
+    public User FindUserData(UserLoginDTO userLoginDTO) {
+        List<User> user = userRepository.FindByEmail(userLoginDTO.getEmail());
         if(user == null) return null;
 
         return user.get(0);
     }
 
-    public User FindUserEmail(String email) {
+    public User FindUserByEmail(String email) {
+        // email을 통해서 DB > User table에 있는 유저정보를 가져온다.
         List<User> list = userRepository.FindByEmail(email);
         if(list.size() == 0) return null;
         return list.get(0);
     }
 
-    public User CreateUserData(UserSignUp userSignUp) {
+    public User CreateUserData(UserSignUpDTO userSignUpDTO) {
+        // DB > User table에 유저정보를 저장한다.
         for(User u : userRepository.FindUserList()) {
-            if(u.getEmail().equals(userSignUp.getEmail())) {
+            if(u.getEmail().equals(userSignUpDTO.getEmail())) {
                 return null;
             }
         }
-        GET_ID++;
-        userRepository.CreateUser(userSignUp, GET_ID);
-        return userRepository.FindById(GET_ID);
+        return userRepository.CreateUser(userSignUpDTO);
     }
 
-    public String CreateToken(User user) {
-        // 토큰생성
-        // 토큰에 "username", "email"dl ekarlsek.
-        // 토큰의 유효시간은 2시간이다.
-        Date now = new Date();
-        return Jwts.builder()
-                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .setIssuer("fresh")
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + Duration.ofSeconds(1000 * 60 * 60 * 2).toMillis()))
-                .claim("nickname", user.getNickname())
-                .claim("email", user.getEmail())
-                .signWith(SignatureAlgorithm.HS256, SIGN_KEY)
-                .compact();
-    }
-
-    public Map<String, String> CheckToken(String key) {
-        // / 매개변수 key를 통해 전달 되는 토큰 값에 유효성을 체크하여 결과를 리턴한다.
-        try {
-            Claims claims = Jwts.parser().setSigningKey(SIGN_KEY)
-                    .parseClaimsJws(key)
-                    .getBody();
-
-            String userEmail = (String) claims.get("email");
-            return new HashMap<>() {{
-                put("email", userEmail);
-                put("message", "ok");
-            }};
-        } catch (ExpiredJwtException e) {
-            return new HashMap<>() {{
-                put("email", null);
-                put("message", "The token time has expired.");
-            }};
-        } catch (JwtException e) {
-            return new HashMap<>() {{
-                put("email", null);
-                put("message", "The token is invalid.");
-            }};
-        }
-    }
-
-    // 헤더에 "token "이 포함 되어 있는지 체크한다.
-    public void validationAuthorizationHeader(String header) {
-        if (header == null || !header.startsWith("token ")) {
-            throw new IllegalArgumentException();
-        }
-    }
-    // 헤더에 "token "을 제거한다.
-    public String extractToken(String authorizationHeader) {
-        return authorizationHeader.substring("token ".length());
-    }
-
-    public OAuthCode FindUserOAuth() {
-        return userRepository.FindUserOAuthCode();
-    }
-
+    // Access Token 받기
     public String getAccessToken (String authorize_code) {
         String access_Token = "";
         String refresh_Token = "";
@@ -119,11 +59,11 @@ public class UserService {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            //    POST 요청을 위해 기본값이 false인 setDoOutput을 true로
+            // POST 요청을 위해 기본값이 false인 setDoOutput을 true로 변경한다.
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
 
-            //    POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
+            // POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
@@ -133,11 +73,11 @@ public class UserService {
             bw.write(sb.toString());
             bw.flush();
 
-            //    결과 코드가 200이라면 성공
+            // 결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode : " + responseCode);
 
-            //    요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            // 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = "";
             String result = "";
@@ -167,8 +107,9 @@ public class UserService {
         return access_Token;
     }
 
+    // 회원정보 이메일, 닉네임 받기
     public HashMap<String, Object> getUserInfo (String access_Token) {
-        //    요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
+        // 요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap 타입으로 선언
         HashMap<String, Object> userInfo = new HashMap<>();
         String reqURL = "https://kapi.kakao.com/v2/user/me";
         try {
@@ -192,6 +133,7 @@ public class UserService {
             }
             System.out.println("response body : " + result);
 
+            // 파싱을 통해서 email과 nickname을 정보로 넘겨준다.
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
@@ -210,5 +152,39 @@ public class UserService {
         }
 
         return userInfo;
+    }
+
+    // 로그아웃을 위한 메소드
+    public void userLogout(String access_Token) {
+        String reqURL = "https://kapi.kakao.com/v1/user/logout";
+        try {
+            // 해당 url에 액세스 토큰을 통해서 로그아웃 POST 요청을 보낸다.
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization", "Bearer " + access_Token);
+
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode : " + responseCode);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String result = "";
+            String line = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            System.out.println(result);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public String changeUserData(UserChangeInfoDTO userChangeInfoDTO, User user) {
+        // DB > User table의 해당 유저의 닉네임을 수정한다.
+        String res = userRepository.ChangeUser(userChangeInfoDTO, user);
+        return res;
     }
 }

@@ -1,6 +1,6 @@
 package com.Team4.FetchNoteServer.Domain;
 
-public class CommentInput {
+public class CommentInputDTO {
     Long userId;
     Long patchId;
     String comment;

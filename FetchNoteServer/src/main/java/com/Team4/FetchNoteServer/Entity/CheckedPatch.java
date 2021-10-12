@@ -21,14 +21,14 @@ public class CheckedPatch {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column
-    private boolean isFirst = false;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isFirst;
 
-    @Column
-    private boolean right = false;
+    @Column(columnDefinition = "boolean default false")
+    private boolean right;
 
-    @Column
-    private boolean wrong = false;
+    @Column(columnDefinition = "boolean default false")
+    private boolean wrong;
 
     public CheckedPatch() {}
 

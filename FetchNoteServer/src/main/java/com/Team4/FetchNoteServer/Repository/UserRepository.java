@@ -1,7 +1,7 @@
 package com.Team4.FetchNoteServer.Repository;
 
-import com.Team4.FetchNoteServer.Domain.UserSignUp;
-import com.Team4.FetchNoteServer.Entity.OAuthCode;
+import com.Team4.FetchNoteServer.Domain.UserChangeInfoDTO;
+import com.Team4.FetchNoteServer.Domain.UserSignUpDTO;
 import com.Team4.FetchNoteServer.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -43,19 +42,33 @@ public class UserRepository {
     public User FindById(long id) {
         return entityManager.find(User.class, id);
     }
+
     // DB User 테이블에 매개변수 userSignUp과 id의 데이터를 사용하여 유저 정보를 저장한다.
-    public void CreateUser(UserSignUp userSignUp, Long id) {
+    public User CreateUser(UserSignUpDTO userSignUpDTO) {
         User user = new User();
-        user.setId(id);
-        user.setEmail(userSignUp.getEmail());
-        user.setNickname(userSignUp.getNickname());
+        user.setEmail(userSignUpDTO.getEmail());
+        user.setNickname(userSignUpDTO.getNickname());
         entityManager.persist(user);
 
         entityManager.flush();
         entityManager.close();
+
+        return user;
     }
 
-    public OAuthCode FindUserOAuthCode(){
-        return entityManager.find(OAuthCode.class, 0L);
+    // DB User 테이블에 매개변수 userChangeInfo와 user의 데이터를 사용하여 유저 정보를 수정한다.
+    public String ChangeUser(UserChangeInfoDTO userChangeInfoDTO, User user) {
+        User u = entityManager.find(User.class, user.getId());
+
+        boolean isChange = false;
+        if(userChangeInfoDTO.getNickname() == null) return "not found";
+        // 닉네임이 달라야 수정이 가능하다.
+        if(!userChangeInfoDTO.getNickname().equals(user.getNickname())) {
+            isChange = true;
+            u.setNickname(userChangeInfoDTO.getNickname());
+        }
+
+        if(isChange) return "modify";
+        else return "same";
     }
 }

@@ -1,9 +1,7 @@
 package com.Team4.FetchNoteServer.Service;
 
-import com.Team4.FetchNoteServer.Domain.CommentInput;
-import com.Team4.FetchNoteServer.Domain.UserSignUp;
+import com.Team4.FetchNoteServer.Domain.CommentInputDTO;
 import com.Team4.FetchNoteServer.Entity.PatchComment;
-import com.Team4.FetchNoteServer.Entity.User;
 import com.Team4.FetchNoteServer.Repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +15,8 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
     // controller에서 요청받은 메소드로, repository에 comment 생성 요청을 한다.
-    public void CreateCommentData(CommentInput commentInput) {
-        commentRepository.CreateComment(commentInput);
+    public void CreateCommentData(CommentInputDTO commentInputDTO) {
+        commentRepository.CreateComment(commentInputDTO);
     }
 
     // controller에서 요청받은 메소드로, repository에 comment 삭제 요청을 한다.
@@ -31,8 +29,8 @@ public class CommentService {
     }
 
     // controller에서 요청받은 메소드로, repository에 comment 수정 요청을 한다.
-    public String ModifyCommentData(Long id, CommentInput commentInput) {
-        String res = commentRepository.ChangeComment(id, commentInput);
+    public String ModifyCommentData(Long id, CommentInputDTO commentInputDTO) {
+        String res = commentRepository.ChangeComment(id, commentInputDTO);
         return res;
     }
 }

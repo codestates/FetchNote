@@ -1,7 +1,4 @@
 --Test Dummy Data
--- oauth code(by jogiyo)
-INSERT INTO oauth_code (id, client_id) VALUES(0, "b1439c1ca8b3431678a1c6cc28df99c6");
-
 --user
 INSERT INTO `user` (id, email, nickname, exp) VALUES (1, "kimcoding@code.states", "김코딩", 150);
 INSERT INTO `user` (id, email, nickname, exp) VALUES (2, "parkhacker@code.states", "박해커", 1000);
@@ -21,15 +18,20 @@ INSERT INTO `like_game` (id, game_id, user_id) VALUES (4, 2, 2);
 INSERT INTO `like_game` (id, game_id, user_id) VALUES (5, 3, 4);
 
 --patch
-INSERT INTO `patches` (id, user_id, game_id, title, body, image, `right`, wrong, created_at, updated_at) VALUES (1, 1, 1, "11.01 패치내역", "저는 거짓말 안합니다", "0", 3, 2, now(), now());
-INSERT INTO `patches` (id, user_id, game_id, title, body, image, `right`, wrong, created_at, updated_at) VALUES (2, 2, 1, "11.02 패치내역", "좋아요 많이 눌러주세요", "0", 10, 0, now(), now());
-INSERT INTO `patches` (id, user_id, game_id, title, body, image, `right`, wrong, created_at, updated_at) VALUES (3, 3, 2, "신규 아이콘 카드 업데이트", "아이콘 박지성 너무좋아요", "0", 1, 11, now(), now());
-INSERT INTO `patches` (id, user_id, game_id, title, body, image, `right`, wrong, created_at, updated_at) VALUES (4, 4, 3, "신규 알고리즘 업데이트", "저는 거짓말 안합니다", "0", 20, 2, now(), now());
+INSERT INTO `patches` (id, user_id, game_id, title, body, `right`, wrong, created_at, updated_at) VALUES (1, 1, 1, "11.01 패치내역", "저는 거짓말 안합니다", 3, 2, now(), now());
+INSERT INTO `patches` (id, user_id, game_id, title, body, `right`, wrong, created_at, updated_at) VALUES (2, 2, 1, "11.02 패치내역", "좋아요 많이 눌러주세요", 10, 0, now(), now());
+INSERT INTO `patches` (id, user_id, game_id, title, body, `right`, wrong, created_at, updated_at) VALUES (3, 3, 2, "신규 아이콘 카드 업데이트", "아이콘 박지성 너무좋아요", 1, 11, now(), now());
+INSERT INTO `patches` (id, user_id, game_id, title, body, `right`, wrong, created_at, updated_at) VALUES (4, 4, 3, "신규 알고리즘 업데이트", "저는 거짓말 안합니다", 20, 2, now(), now());
+INSERT INTO `patches` (user_id, game_id, title, body) VALUES (1, 1, "TEST TITLE", "TEST BODY");
 
 --checked_patch
-INSERT INTO `checked_patch` (id, patch_id, user_id, is_first, `right`, wrong) VALUES (1, 2, 1, true, true, false);
-INSERT INTO `checked_patch` (id, patch_id, user_id, is_first, `right`, wrong) VALUES (2, 3, 1, true, false, true);
-INSERT INTO `checked_patch` (id, patch_id, user_id, is_first, `right`, wrong) VALUES (3, 1, 1, true, false, false);
+INSERT INTO `checked_patch` (id, patch_id, user_id) VALUES (1, 1, 1);
+INSERT INTO `checked_patch` (id, patch_id, user_id) VALUES (2, 2, 1);
+INSERT INTO `checked_patch` (id, patch_id, user_id) VALUES (3, 3, 1);
+INSERT INTO `checked_patch` (id, patch_id, user_id) VALUES (4, 1, 2);
+INSERT INTO `checked_patch` (patch_id, user_id, is_first, `right`, wrong) VALUES (1, 3, true, false, false);
+INSERT INTO `checked_patch` (patch_id, user_id, is_first, `right`, wrong) VALUES (2, 3, true, true, false);
+INSERT INTO `checked_patch` (patch_id, user_id, is_first, `right`, wrong) VALUES (3, 3, true, false, true);
 
 --patch_comment
 INSERT INTO `patch_comment` (id, patch_id, user_id, comment, created_at, updated_at) VALUES (1, 1, 1, "밸런스 개판이네 개발자 누구냐", now(), now());

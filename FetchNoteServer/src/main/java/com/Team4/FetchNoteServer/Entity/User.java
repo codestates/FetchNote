@@ -17,8 +17,8 @@ public class User {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
-    private int exp = 0;
+    @Column(columnDefinition = "integer default 0")
+    private int exp;
 
     @OneToMany(mappedBy = "user")
     private List<PatchComment> comments = new ArrayList<>();
