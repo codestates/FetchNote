@@ -1,0 +1,29 @@
+.editpage{
+    position: relative;
+}
+.editpage-link{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center
+
+}
+
+.subContent_wrapper{
+    max-width: 1850px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    position: relative;
+    left: 300px;
+    row-gap: 20px;
+}
+
+.editpage-link__wrapper{
+    padding: 25px 10px 25px 0;
+}
+
+@media screen and (min-width:1200px) and (max-width:1800px){
+    .subContent_wrapper{
+        grid-template-columns: 1fr 1fr;
+    }
+    
+}
