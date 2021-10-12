@@ -1,13 +1,8 @@
-.thumbnail{
-    width: inherit;
-    height: inherit;
-    background-color: rgb(87, 87, 87);
-    z-index: 1;
-}
-.thumbnail img{
-    z-index: 0;
-}
+
+
 .favorite{
     position: relative;
     color: blue;
+    top: -465px;
+    right: 40px;
 }

@@ -5,8 +5,7 @@ import "../css/Block.css"
 
 function Block(){
     return (
-        <Link to="/">
-            <div className="thumbnail"> </div>
+        <Link to="/" className="link">
             <img alt="League Of Legends" src="img/lol.jpg" width="800px">
             </img>
             <FontAwesomeIcon icon={faStar} size="2x" className="favorite"></FontAwesomeIcon>
