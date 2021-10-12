@@ -4,6 +4,8 @@ import com.Team4.FetchNoteServer.Domain.PatchesDTO;
 import com.Team4.FetchNoteServer.Entity.Game;
 import com.Team4.FetchNoteServer.Entity.Patches;
 import com.Team4.FetchNoteServer.Entity.User;
+import com.Team4.FetchNoteServer.Repository.CheckedPatchRepository;
+import com.Team4.FetchNoteServer.Repository.PatchesRepository;
 import com.Team4.FetchNoteServer.Service.PatchesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +22,22 @@ public class PatchesController {
 
     private final EntityManager entityManager;
     private final PatchesService patchesService;
+    private final PatchesRepository patchesRepository;
+    private final CheckedPatchRepository checkedPatchRepository;
 
     @Autowired
-    public PatchesController(EntityManager entityManager, PatchesService patchesService) {
+    public PatchesController(EntityManager entityManager, PatchesService patchesService, PatchesRepository patchesRepository, CheckedPatchRepository checkedPatchRepository) {
         this.entityManager = entityManager;
         this.patchesService = patchesService;
+        this.patchesRepository = patchesRepository;
+        this.checkedPatchRepository = checkedPatchRepository;
     }
 
+    private final HashMap<String,String> messageOk = new HashMap<>(){{put("message", "ok");}};
+
     @GetMapping(value = "/patches")
-    public ResponseEntity<?> GetPatches(@RequestParam(required = false, defaultValue = "-404") long patchesId,
+    public ResponseEntity<?> GetPatches(@RequestHeader Map<String, String> header,
+                                        @RequestParam(required = false, defaultValue = "-404") long patchesId,
                                         @RequestParam(required = false, defaultValue = "-404") long gameId) {
 
         if(patchesId == -404 && gameId == -404) {
@@ -37,9 +46,6 @@ public class PatchesController {
             );
 
         //    // case gameId
-        //    "patches": [패치정보1, 패정보2, ...],
-        //    "message": "OK"
-        //    // case patchId
         } else if(patchesId == -404) {
             List<Patches> patchesList = patchesService.GetAllPatches(gameId);
             List<PatchesDTO> result = new ArrayList<>();
@@ -50,7 +56,6 @@ public class PatchesController {
                 dto.setGameId(el.getGame().getId());
                 dto.setTitle(el.getTitle());
                 dto.setBody(el.getBody());
-                dto.setImage(el.getImage().toString());
                 dto.setRight(el.getRight());
                 dto.setWrong(el.getWrong());
                 dto.setCreatedAt(el.getCreatedAt());
@@ -67,19 +72,15 @@ public class PatchesController {
                 }
             );
 
-        //    "info":
-        //        "userId": "userId",
-        //        "gameId": "gameId",
-        //        "title": "title",
-        //        "body": "body",
-        //        "image": "image",
-        //        "right": 0,
-        //        "wrong": 0.
-        //        "createdAt": "createdAt",
-        //        "updatedAt": "updatedAt"
-        //    "message": "OK"
+        //    // case patchId
         } else if(gameId == -404) {
             Patches patches = patchesService.GetPatches(patchesId);
+
+            // 헤더에서 유저 아이디
+            long userId = 2L;
+
+            // 패치를 본순간 CheckedPatch 생성
+            checkedPatchRepository.AddCheckedPatch(patches, userId);
 
             return ResponseEntity.ok().body(
                 new HashMap<>(){
@@ -90,7 +91,6 @@ public class PatchesController {
                                 put("gameId", patches.getGame().getId());
                                 put("title", patches.getTitle());
                                 put("body", patches.getBody());
-                                put("image", patches.getImage().toString());
                                 put("right", patches.getRight());
                                 put("wrong", patches.getWrong());
                                 put("createdAt", patches.getCreatedAt());
@@ -114,7 +114,7 @@ public class PatchesController {
                                         @RequestBody PatchesDTO data) {
 
         //        헤더에서 userId 가져오기 -> UserController
-        long userId = 1L;
+        long userId = 2L;
 
         try{
             User user = entityManager.find(User.class, userId);
@@ -128,29 +128,69 @@ public class PatchesController {
 
             patchesService.RegisterPatches(user, game, data);
 
-            return ResponseEntity.ok().body(
-                    new HashMap<>(){{put("message", "ok");}}
-            );
+            return ResponseEntity.ok().body(messageOk);
         } catch (IllegalArgumentException | NullPointerException e) {
             return ResponseEntity.badRequest().body(e);
         }
     }
 
     @DeleteMapping(value = "/patches")
-    public ResponseEntity<?> DeletePatches() {
+    public ResponseEntity<?> DeletePatches(@RequestHeader Map<String, String> header,
+                                           @RequestBody PatchesDTO data) {
 
-        return null;
+        //유저 검증
+        long userId = 2L;
+        Patches patches = entityManager.find(Patches.class, data.getPatchesId());
+        if(patches.getUser().getId() == userId){
+            patchesRepository.RemovePatches(patches);
+            return ResponseEntity.ok().body(messageOk);
+        } else {
+            return ResponseEntity.badRequest().body(
+                    new HashMap<>(){{put("message", "Invalid User");}}
+            );
+        }
     }
 
-    @PatchMapping(value = "/patches")
-    public ResponseEntity<?> PatchPatches() {
+    //    title
+    //    body
+    @PatchMapping(value = "/patches/{patchesId}")
+    public ResponseEntity<?> PatchPatches(@PathVariable(value = "patchesId") Long patchesId,
+                                          @RequestHeader Map<String, String> header,
+                                          @RequestBody PatchesDTO data) {
 
-        return null;
+        //유저 검증
+        long userId = 2L;
+        Patches patches = entityManager.find(Patches.class, patchesId);
+        if(patches.getUser().getId() == userId){
+            patchesRepository.UpdatePatches(patches, data);
+            return ResponseEntity.ok().body(messageOk);
+        } else {
+            return ResponseEntity.badRequest().body(
+                    new HashMap<>(){{put("message", "Invalid User");}}
+            );
+        }
     }
 
-    @PostMapping(value = "/rating")
-    public ResponseEntity<?> RatePatches() {
+    @PostMapping(value = "/rating/{patchesId}")
+    public ResponseEntity<?> RatePatches(@PathVariable(value = "patchesId") Long patchesId,
+                                         @RequestHeader Map<String, String> header,
+                                         @RequestBody String rating) {
 
-        return null;
+        //  Header -> UserId
+        long userId = 2L;
+
+        try {
+            User user = entityManager.find(User.class, userId);
+            Patches patches = entityManager.find(Patches.class, patchesId);
+            if(userId == patches.getUser().getId()){
+                return ResponseEntity.badRequest().body(
+                        new HashMap<>(){{put("message", "Can not recommend your own post");}}
+                );
+            }
+            checkedPatchRepository.RatingPatches(patches, user, rating);
+            return ResponseEntity.ok().body(messageOk);
+        } catch (NullPointerException e) {
+            return ResponseEntity.badRequest().body(e);
+        }
     }
 }

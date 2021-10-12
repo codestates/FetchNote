@@ -41,6 +41,9 @@ public class CommentRepository {
         com.setUpdatedAt(new Date());
         entityManager.persist(com);
 
+        user.setExp(user.getExp() + 1);
+        entityManager.persist(user);
+
         entityManager.flush();
         entityManager.close();
     }
@@ -49,6 +52,10 @@ public class CommentRepository {
     public void RemoveComment(Long id) {
         PatchComment comment = entityManager.find(PatchComment.class, id);
         entityManager.remove(comment);
+
+        User user = comment.getUser();
+        user.setExp(user.getExp() - 1);
+        entityManager.persist(user);
 
         entityManager.flush();
         entityManager.close();

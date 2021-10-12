@@ -14,39 +14,43 @@ public class Patches {
     private long id;
 
     @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
     @ManyToOne(targetEntity = Game.class)
-    @JoinColumn(name = "game_id")
+    @JoinColumn(nullable = false, name = "game_id")
     private Game game;
 
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String body;
 
-    @Lob
-    @Column
-    private Blob image;
+    @Column(columnDefinition = "integer default 0")
+    private int right;
 
-    @Column(nullable = false)
-    private int right = 0;
+    @Column(columnDefinition = "integer default 0")
+    private int wrong;
 
-    @Column(nullable = false)
-    private int wrong = 0;
-
-    @Column(nullable = false, name = "created_at")
+    @Column(name = "created_at", columnDefinition = "datetime default now()")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @Column(nullable = false, name = "updated_at")
+    @Column(name = "updated_at", columnDefinition = "datetime default now()")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
     @OneToMany(mappedBy = "patches")
     private List<PatchComment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "patches")
+    private List<CheckedPatch> checkedPatches = new ArrayList<>();
+
+    @OneToMany(mappedBy = "patches")
+    private List<Image> images = new ArrayList<>();
+
+    public Patches() {}
 
     public List<PatchComment> getComments() {
         return comments;
@@ -56,7 +60,21 @@ public class Patches {
         this.comments = comments;
     }
 
-    public Patches() {}
+    public List<CheckedPatch> getCheckedPatches() {
+        return checkedPatches;
+    }
+
+    public void setCheckedPatches(List<CheckedPatch> checkedPatches) {
+        this.checkedPatches = checkedPatches;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
 
     public long getId() {
         return id;
@@ -96,14 +114,6 @@ public class Patches {
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public Blob getImage() {
-        return image;
-    }
-
-    public void setImage(Blob image) {
-        this.image = image;
     }
 
     public int getRight() {

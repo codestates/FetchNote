@@ -1,16 +1,13 @@
 package com.Team4.FetchNoteServer.Repository;
 
 import com.Team4.FetchNoteServer.Domain.PatchesDTO;
-import com.Team4.FetchNoteServer.Entity.Game;
-import com.Team4.FetchNoteServer.Entity.Patches;
-import com.Team4.FetchNoteServer.Entity.User;
+import com.Team4.FetchNoteServer.Entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.sql.Blob;
-import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -43,16 +40,39 @@ public class PatchesRepository {
         patches.setGame(game);
         patches.setTitle(data.getTitle());
         patches.setBody(data.getBody());
-        byte[] byteContent = data.getImage().getBytes();
-        Blob image = null;
-        try {
-            image.setBytes(game.getId(),byteContent);
-            patches.setImage(image);
-            entityManager.persist(patches);
-            entityManager.flush();
-            entityManager.close();
-        } catch (NullPointerException | SQLException e) {
-            e.printStackTrace();
-        }
+
+        Date date = new Date();
+
+        patches.setCreatedAt(date);
+        patches.setUpdatedAt(date);
+
+        entityManager.persist(patches);
+        entityManager.flush();
+        entityManager.close();
+    }
+
+    public void RemovePatches (Patches patches) {
+        long patchesId = patches.getId();
+        List<PatchComment> comments = entityManager.createQuery("SELECT el FROM PatchComment el WHERE patch_id =" + patchesId + "", PatchComment.class).getResultList();
+        List<CheckedPatch> checkedPatches = entityManager.createQuery("SELECT el FROM CheckedPatch el WHERE patch_id =" + patchesId + "", CheckedPatch.class).getResultList();
+        List<Image> images = entityManager.createQuery("SELECT el FROM Image el WHERE patch_id =" + patchesId + "", Image.class).getResultList();
+
+        for(PatchComment el : comments) entityManager.remove(el);
+        for(CheckedPatch el : checkedPatches) entityManager.remove(el);
+        for(Image el : images) entityManager.remove(el);
+
+        entityManager.remove(patches);
+        entityManager.flush();
+        entityManager.close();
+    }
+
+    public void UpdatePatches(Patches patches, PatchesDTO data) {
+        if(data.getTitle() != null) patches.setTitle(data.getTitle());
+        if(data.getBody() != null) patches.setBody(data.getBody());
+        patches.setUpdatedAt(new Date());
+
+        entityManager.persist(patches);
+        entityManager.flush();
+        entityManager.close();
     }
 }
