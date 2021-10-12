@@ -1,0 +1,47 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(221, 221, 219);
+}
+#form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+#LoginFrom {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin-top: 150px;
+    border-radius: 5%;
+    padding: 0 20px;
+    background-color: rgb(255, 255, 255);
+}
+
+#LoginForm_Title{
+    /* margin: 20px 0 40ps 0; */
+    font-size: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 50px;
+
+}
+#LoginForm_Title img {
+    height: 50px;
+    margin: 5px;
+}
+#LoginForm_Title h1{
+    font-size: 50px;
+    padding-left: 75px;
+    margin: 0;
+}
+#LoginFrom > button{
+    padding: 0;
+    outline: none;
+    border: none;
+    margin: 100px 0 300px 0;
+}

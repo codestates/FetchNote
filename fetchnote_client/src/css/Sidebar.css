@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Hahmlet:wght@300&display=swap');
+*{
+    font-family: 'Hahmlet', serif;
+}
+::-webkit-scrollbar-button{
+    display: none;
+}
+::-webkit-scrollbar{
+    width: 5.2px;
+}
+ul,
+li{
+    list-style: none;
+    margin: 0;
+    padding:0;
+}
+nav{
+    background-color: rgb(245, 245, 245);
+    position: fixed;
+}
+.navigationBar{
+    
+    top: 0;
+    left: 50px;
+    height: 100%;
+    padding: 50px 15px 10px 15px;
+    box-sizing: border-box;
+    z-index: 0;
+}
+.navigationBar_list{
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+.navigationBar_list_elements{
+    margin-bottom: 20px;
+}
+.navigationBar_list_elements img{
+    height: 60px;
+}
+.navigationBar_list_elements div{
+    background-color: #fff;
+    width: 70px;
+    height: 70px;
+    margin-bottom: 20px;
+}
+.userProfile{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+.userProfile img{
+    border-radius:50%;
+}
+.userProfile span{
+    margin-top: 8px;
+}
+.mainPage::after{
+    content: "";
+    display: block;
+    width: 80px;
+    border: 1px solid rgb(201, 198, 198);
+    margin-top: 15px;
+}
+.favoriteGames{
+    height: 810px;
+    overflow-y: auto;
+}
+.game{
+    margin-bottom: 20px;
+}
+.game div {
+    background-color: white;
+    border-radius: 50px;
+}
+.game img{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+span{
+    font-weight: bolder;
+}
+.userProfile:click nav{
+    width: 200px;
+}
+.sideBarBtn{
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    top: 135px;
+    left: 75px;
+    z-index: 0;
+    border-radius: 50%;
+    border: none;
+}
+
