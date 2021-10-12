@@ -2,7 +2,6 @@ package com.Team4.FetchNoteServer.Repository;
 
 import com.Team4.FetchNoteServer.Domain.CommentInput;
 import com.Team4.FetchNoteServer.Domain.UserSignUp;
-import com.Team4.FetchNoteServer.Entity.Comment;
 import com.Team4.FetchNoteServer.Entity.PatchComment;
 import com.Team4.FetchNoteServer.Entity.Patches;
 import com.Team4.FetchNoteServer.Entity.User;
@@ -42,6 +41,9 @@ public class CommentRepository {
         com.setUpdatedAt(new Date());
         entityManager.persist(com);
 
+        user.setExp(user.getExp() + 1);
+        entityManager.persist(user);
+
         entityManager.flush();
         entityManager.close();
     }
@@ -50,6 +52,10 @@ public class CommentRepository {
     public void RemoveComment(Long id) {
         PatchComment comment = entityManager.find(PatchComment.class, id);
         entityManager.remove(comment);
+
+        User user = comment.getUser();
+        user.setExp(user.getExp() - 1);
+        entityManager.persist(user);
 
         entityManager.flush();
         entityManager.close();
