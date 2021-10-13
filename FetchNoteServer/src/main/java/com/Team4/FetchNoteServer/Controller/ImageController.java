@@ -2,7 +2,7 @@ package com.Team4.FetchNoteServer.Controller;
 
 import com.Team4.FetchNoteServer.Domain.ImageDTO;
 import com.Team4.FetchNoteServer.Repository.ImageRepository;
-import com.Team4.FetchNoteServer.Service.S3Uploader;
+import com.Team4.FetchNoteServer.Service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +17,12 @@ import java.util.UUID;
 public class ImageController {
 
     private final ImageRepository imageRepository;
-    private final S3Uploader s3Uploader;
+    private final ImageService imageService;
 
     @Autowired
-    public ImageController(ImageRepository imageRepository, S3Uploader s3Uploader) {
+    public ImageController(ImageRepository imageRepository, ImageService imageService) {
         this.imageRepository = imageRepository;
-        this.s3Uploader = s3Uploader;
+        this.imageService = imageService;
     }
 
     private final static String S3_DIR = "static";
@@ -38,7 +38,7 @@ public class ImageController {
             dto.setImagetype(data.getParameter("imagetype"));
 
             String fileName = UUID.randomUUID() + "-" + dto.getImagename();
-            String url = s3Uploader.upload(imageblob, S3_DIR, fileName);
+            String url = imageService.upload(imageblob, S3_DIR, fileName);
 
             dto.setAddress(url);
             imageRepository.ImageUpload(dto);
@@ -74,9 +74,13 @@ public class ImageController {
 
     @DeleteMapping("/image")
     public ResponseEntity<?> DeleteImage(@RequestBody ImageDTO data) {
-        String address = imageRepository.ImageDelete(data.getImageId());
-        String key = S3_DIR + "/" + address.substring(address.lastIndexOf("/") + 1);
-        s3Uploader.delete(key);
-        return ResponseEntity.ok().body(new HashMap<>(){{put("message", "ok");}});
+        try {
+            String address = imageRepository.ImageDelete(data.getImageId());
+            String key = S3_DIR + "/" + address.substring(address.lastIndexOf("/") + 1);
+            imageService.delete(key);
+            return ResponseEntity.ok().body(new HashMap<>(){{put("message", "ok");}});
+        } catch (NullPointerException e) {
+            return ResponseEntity.badRequest().body(e);
+        }
     }
 }
