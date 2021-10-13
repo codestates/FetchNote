@@ -1,6 +1,6 @@
 import PatchnoteBlock from "./PatchnoteBlock";
 import Sidebar from "./Sidebar"
-import "../css/Retch.css"
+import "../css/Fetch.css"
 import { Link } from "react-router-dom";
 
 function Fetch(){
