@@ -1,6 +1,7 @@
 package com.Team4.FetchNoteServer.Entity;
 
 import javax.persistence.*;
+import java.sql.Blob;
 
 @Entity
 public class Image {
@@ -20,7 +21,7 @@ public class Image {
     private String imagetype;
 
     @Column(nullable = false, length = 2048)
-    private byte[] imagebyte;
+    private String address;
 
     public Image() {}
 
@@ -48,19 +49,19 @@ public class Image {
         this.imagetype = imagetype;
     }
 
-    public byte[] getImagebyte() {
-        return imagebyte;
-    }
-
-    public void setImagebyte(byte[] imagebyte) {
-        this.imagebyte = imagebyte;
-    }
-
     public Patches getPatches() {
         return patches;
     }
 
     public void setPatches(Patches patches) {
         this.patches = patches;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
