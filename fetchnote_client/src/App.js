@@ -8,12 +8,13 @@ import About from "./components/About.js";
 import EditePatch from "./components/EditePatch.js";
 import Fetch from "./components/Fetch.js";
 import axios from 'axios';
+import PatchWrite from "./components/PatchWrite.js";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      isLogin: false,
+      isLogin: true,
     };
     this.getAccessToken = this.getAccessToken.bind(this);
   }
@@ -62,7 +63,7 @@ class App extends Component {
               <Fetch/>
             </Route>
             <Route exact path="/write">
-              <EditePatch/>
+              <PatchWrite />
             </Route>
           </Switch>
         </BrowserRouter>

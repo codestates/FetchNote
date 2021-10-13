@@ -29,13 +29,13 @@ public class ImageController {
 
     @PostMapping("/image")
     public ResponseEntity<?> UploadImage(HttpServletRequest data,
-                                      @RequestPart(value = "imageblob") MultipartFile imageblob){
+                                      @RequestPart(value = "upload") MultipartFile imageblob){
 
         try {
             ImageDTO dto = new ImageDTO();
-            dto.setPatchId(Long.parseLong(data.getParameter("patchId")));
-            dto.setImagename(data.getParameter("imagename"));
-            dto.setImagetype(data.getParameter("imagetype"));
+            dto.setPatchId(21L);
+            dto.setImagename(imageblob.getOriginalFilename());
+            dto.setImagetype(imageblob.getContentType());
 
             String fileName = UUID.randomUUID() + "-" + dto.getImagename();
             String url = imageService.upload(imageblob, S3_DIR, fileName);
