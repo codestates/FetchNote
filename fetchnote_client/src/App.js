@@ -64,6 +64,7 @@ class App extends Component {
             <Route exact path="/fetchNote">
               <FetchNote/>
             </Route>
+            <Route exact path="/mypage"></Route>
           </Switch>
         </BrowserRouter>
       </div>
