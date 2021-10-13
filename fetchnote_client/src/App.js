@@ -5,9 +5,9 @@ import { Component, useEffect, useState } from "react";
 import Main from "./components/Main"
 import dotenv from "dotenv";
 import About from "./components/About.js";
-import EditePatch from "./components/EditePatch.js";
 import Fetch from "./components/Fetch.js";
 import axios from 'axios';
+import FetchNote from "./components/FetchNote.js";
 
 class App extends Component {
   constructor() {
@@ -61,8 +61,8 @@ class App extends Component {
             <Route exact path="/patch">
               <Fetch/>
             </Route>
-            <Route exact path="/write">
-              <EditePatch/>
+            <Route exact path="/fetchNote">
+              <FetchNote/>
             </Route>
           </Switch>
         </BrowserRouter>

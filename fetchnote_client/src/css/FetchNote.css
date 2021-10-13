@@ -1,0 +1,56 @@
+.patchNote{
+    width: 80%;
+    position: relative;
+    margin: 100px 0;
+    left: 13%;
+}
+
+.petchNote_body{
+    height: 800px;
+    background-color:  rgb(212, 212, 212);
+    border: 1px solid rgb(138, 138, 138);
+    
+}
+.petchNote_likeBtns{
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: 1px solid rgb(138, 138, 138);
+    border-right: 1px solid rgb(138, 138, 138);
+    background-color: rgb(223, 219, 219);
+}
+
+.patchNote_btns{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 1px solid rgb(138, 138, 138);
+    border-right: 1px solid rgb(138, 138, 138);
+    padding: 0 10px 10px 10px;
+    background-color: rgb(223, 219, 219);
+}
+.commentList_input{
+    position: relative;
+}
+.commentList_input input{
+    box-sizing: border-box;
+    width: 100%;
+    outline: none;
+    font-size: 20px;
+    padding: 0 60px 0 10px;
+    line-height: 40px;
+}
+.commentList_input button{
+    box-sizing: border-box;
+    width: 60px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 42px;
+    border: none;
+    background-color:black;
+    color: whitesmoke;
+    font-weight: 800;
+    font-size: 15px;
+}
