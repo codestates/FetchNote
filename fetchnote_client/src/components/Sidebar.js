@@ -17,7 +17,6 @@ function Sidebar(){
                 레벨
                 메인 페이지 가는 건 
                 선호게임들 리스트*/}
-            <input className="sideBarBtn" type="checkbox"></input>
             <ul className="navigationBar_list">
                 <li className="navigationBar_list_elements logo">
                     <Link to="/">
@@ -32,7 +31,10 @@ function Sidebar(){
                     <span className="userLevel">100,000</span>
                 </li>
                 <li className="navigationBar_list_elements mainPage">
-                   <FontAwesomeIcon icon={faHome} size="3x"></FontAwesomeIcon>
+                    <Link to="/mypage">
+                        <FontAwesomeIcon icon={faHome} size="3x"></FontAwesomeIcon>
+                    </Link>
+                   
                 </li>
                 <li>
                 {
@@ -40,25 +42,34 @@ function Sidebar(){
                     
                     <ul className="favoriteGames">
                         <li className="game">
+                            <Link to="patch">
                             <div>
                                 <img alt="League Of Legends" src="img/lol-logo.svg"></img>
                             </div>
+                            </Link>
                         </li>
                         <li className="game">
+                            <Link to="patch">
                             <div>
                                 <img alt="Lost Ark" src="img/Lost Ark.jpg"></img>
                             </div>
+                            </Link>
                         </li>
                         <li className="game">
+                            <Link to="patch">
                             <div>
                             <img alt="Battle Grounds" src="img/bage.jpg"></img>
                             </div>
+                            </Link>
                         </li>
                         <li className="game">
+                            <Link to="patch">
                             <div>
                             <img alt="Raindow Sixisiege" src="img/RainbowSixisiege.jpg"></img>
                             </div>
+                            </Link>
                         </li>
+                        
                     </ul>)
                 }
                 </li>

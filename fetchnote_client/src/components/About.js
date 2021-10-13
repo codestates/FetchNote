@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import "../css/Introduce.css"
+import "../css/About.css"
 
-function Introduce(){
+function About(){
     return(
         <div className="IntroducPage">
             <header>
@@ -14,19 +14,22 @@ function Introduce(){
                 <div className="contentList_elements">
                     <div className="frontground"></div>
                     <img alt="playing game" src="img/playingGame.jpg"></img>
-                    <div>패치노트 찾아다니기 <br/>귀찮으셨죠</div>
+                    <div className="text">패치노트 찾아다니기 <br/>귀찮으셨죠</div>
                 </div>
                 <div className="contentList_elements">
-                    <img alt="playing game" src="img/playingGame.jpg"></img>
-                    <div>패치노트가 수정이 됬어여</div>
+                    <div className="frontground"></div>
+                    <img alt="playing game" src="img/note.jpg"></img>
+                    <div className="text">패치노트가 수정이 됬어여</div>
                 </div>
                 <div className="contentList_elements">
+                    <div className="frontground"></div>
                     <img alt="playing game" src="img/playingGame.jpg"></img>
-                    <div>아아아아</div>
+                    <div className="text">아아아아</div>
                 </div>
                 <div className="contentList_elements">
+                    <div className="frontground"></div>
                     <img alt="playing game" src="img/playingGame.jpg"></img>
-                    <div>여러분도 시작해보세요!</div>
+                    <div className="text">여러분도 시작해보세요!</div>
                 </div>
             </main>
         </div>
@@ -34,4 +37,4 @@ function Introduce(){
     )
 }
 
-export default Introduce;
+export default About;
