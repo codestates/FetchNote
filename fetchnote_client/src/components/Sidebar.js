@@ -31,7 +31,10 @@ function Sidebar(){
                     <span className="userLevel">100,000</span>
                 </li>
                 <li className="navigationBar_list_elements mainPage">
-                   <FontAwesomeIcon icon={faHome} size="3x"></FontAwesomeIcon>
+                    <Link to="/mypage">
+                        <FontAwesomeIcon icon={faHome} size="3x"></FontAwesomeIcon>
+                    </Link>
+                   
                 </li>
                 <li>
                 {

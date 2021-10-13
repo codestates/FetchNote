@@ -1,0 +1,15 @@
+.comment{
+    width: inherit;
+    height: 100px;
+    background-color: rgb(243, 243, 235);
+    border: 1px solid rgb(138, 138, 138);
+}
+.comment_header{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 25px 10px 25px;
+}
+.comment_header button{
+    border: none;
+    background-color: rgb(243, 243, 235);
+}
