@@ -25,6 +25,8 @@ public class ImageController {
         this.s3Uploader = s3Uploader;
     }
 
+    private final static String S3_DIR = "static";
+
     @PostMapping("/image")
     public ResponseEntity<?> UploadImage(HttpServletRequest data,
                                       @RequestPart(value = "imageblob") MultipartFile imageblob){
@@ -35,9 +37,8 @@ public class ImageController {
             dto.setImagename(data.getParameter("imagename"));
             dto.setImagetype(data.getParameter("imagetype"));
 
-            String s3Dir = "static";
             String fileName = UUID.randomUUID() + "-" + dto.getImagename();
-            String url = s3Uploader.upload(imageblob, s3Dir, fileName);
+            String url = s3Uploader.upload(imageblob, S3_DIR, fileName);
 
             dto.setAddress(url);
             imageRepository.ImageUpload(dto);
@@ -74,7 +75,8 @@ public class ImageController {
     @DeleteMapping("/image")
     public ResponseEntity<?> DeleteImage(@RequestBody ImageDTO data) {
         String address = imageRepository.ImageDelete(data.getImageId());
-//        s3Uploader.delete(address);
+        String key = S3_DIR + "/" + address.substring(address.lastIndexOf("/") + 1);
+        s3Uploader.delete(key);
         return ResponseEntity.ok().body(new HashMap<>(){{put("message", "ok");}});
     }
 }
