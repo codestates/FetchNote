@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import About from "./components/About.js";
 import EditePatch from "./components/EditePatch.js";
 import Fetch from "./components/Fetch.js";
+import FetchNote from "./components/FetchNote.js";
 
 function App() {
   const [userInfo, setUserInfo] = useState(true);
@@ -31,6 +32,9 @@ function App() {
           </Route>
           <Route exact path="/write">
             <EditePatch/>
+          </Route>
+          <Route exact path="/fetchnote">
+            <FetchNote></FetchNote>
           </Route>
         </Switch>
       </BrowserRouter>

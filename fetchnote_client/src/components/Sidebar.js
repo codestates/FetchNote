@@ -39,25 +39,34 @@ function Sidebar(){
                     
                     <ul className="favoriteGames">
                         <li className="game">
+                            <Link to="patch">
                             <div>
                                 <img alt="League Of Legends" src="img/lol-logo.svg"></img>
                             </div>
+                            </Link>
                         </li>
                         <li className="game">
+                            <Link to="patch">
                             <div>
                                 <img alt="Lost Ark" src="img/Lost Ark.jpg"></img>
                             </div>
+                            </Link>
                         </li>
                         <li className="game">
+                            <Link to="patch">
                             <div>
                             <img alt="Battle Grounds" src="img/bage.jpg"></img>
                             </div>
+                            </Link>
                         </li>
                         <li className="game">
+                            <Link to="patch">
                             <div>
                             <img alt="Raindow Sixisiege" src="img/RainbowSixisiege.jpg"></img>
                             </div>
+                            </Link>
                         </li>
+                        
                     </ul>)
                 }
                 </li>
