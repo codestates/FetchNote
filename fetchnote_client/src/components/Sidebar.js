@@ -5,16 +5,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../css/Sidebar.css";
 import axios from "axios";
 
-function Sidebar(props){
+function Sidebar({ accessToken, favGame, setFavGame, changeGameId }){
     // 좋아하는 게임 목록을 받아와 출력을 해야 한다
     // const { userinfo } = props;
-    const { accessToken } = props;
-    const [likeGames , SetLikeGames] = useState(1); 
     const [userinfo, setUserinfo] = useState({});
+    
+    const [r_1,reloadEffect_1] = useState(false);
+    const [r_2,reloadEffect_2] = useState(0);
+
+    const BASE_URL = "https://localhost:8080/";
 
     async function getUserInfo() {
-        console.log(accessToken);
-        let res = await axios.get('https://localhost:8080/user', {
+        let res = await axios.get(BASE_URL + 'user', {
             headers: {
                 authorization: accessToken
             }
@@ -22,13 +24,29 @@ function Sidebar(props){
         setUserinfo(res.data.userinfo);
     }
 
-    function click(){
-        console.log("버튼이 눌렀습니다");
+    const getGames = async () => {
+        try {
+            return await axios({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': accessToken,
+                },
+                method: 'get',
+                url: BASE_URL + "game?prefer=true",
+            }).then(resp => setFavGame(resp.data.games))
+            .then(reloadEffect_2(favGame));
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     useEffect(() => {
-        getUserInfo();
-    }, []);
+        async function getSideInfo() {
+            await getUserInfo();
+            await getGames();
+        }
+        getSideInfo();
+    },[r_2]);
 
     return (
         <nav className="navigationBar">
@@ -58,43 +76,30 @@ function Sidebar(props){
                 </li>
                 <li>
                 {
-                    likeGames === null ?<div></div> : (
-                    
+                    favGame.length === 0 ? (<div></div>) : (
                     <ul className="favoriteGames">
-                        <li className="game">
-                            <Link to="patch">
-                            <div>
-                                <img alt="League Of Legends" src="img/lol-logo.svg"></img>
-                            </div>
-                            </Link>
-                        </li>
-                        <li className="game">
-                            <Link to="patch">
-                            <div>
-                                <img alt="Lost Ark" src="img/Lost Ark.jpg"></img>
-                            </div>
-                            </Link>
-                        </li>
-                        <li className="game">
-                            <Link to="patch">
-                            <div>
-                            <img alt="Battle Grounds" src="img/bage.jpg"></img>
-                            </div>
-                            </Link>
-                        </li>
-                        <li className="game">
-                            <Link to="patch">
-                            <div>
-                            <img alt="Raindow Sixisiege" src="img/RainbowSixisiege.jpg"></img>
-                            </div>
-                            </Link>
-                        </li>
-                        
-                    </ul>)
+                        {favGame.map((el,idx) => {
+                            const linkClick = () => {
+                                changeGameId(id);
+                                document.getElementById(name + id + "s").click();
+                            }
+
+                            const { id, name, image } = el;
+
+                            return(
+                                <li key={id + 400} className="game">
+                                <Link to="/patch" id={name + id + "s"} className="link" hidden/>
+                                <div>
+                                    <img alt={"game_small_img_" + id} src={"img/games/" + id + ".jpg"} onClick={linkClick}></img>
+                                </div>
+                                </li>
+                            ) 
+                        })}
+                    </ul>
+                    )
                 }
                 </li>
             </ul>
-            
         </nav>
     )
 }

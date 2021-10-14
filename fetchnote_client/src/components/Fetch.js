@@ -17,7 +17,7 @@ function Fetch(props) {
                     'authorization': props.accessToken,
                 },
                 method: 'get',
-                url: 'https://localhost:8080/patches?gameId=' + props.curGameId,
+                url: props.BASE_URL + 'patches?gameId=' + props.curGameId,
             })
         } catch (e) {
             console.error(e);
@@ -41,7 +41,7 @@ function Fetch(props) {
                       'authorization': props.accessToken,
                     },
                     method: 'post',
-                    url: 'https://localhost:8080/patches',
+                    url: props.BASE_URL + 'patches',
                     data: {
                         gameId : props.curGameId,
                         title: "temp",
@@ -65,7 +65,11 @@ function Fetch(props) {
 
     return(
         <div>
-            <Sidebar accessToken={props.accessToken}/>
+            <Sidebar
+                accessToken={props.accessToken}
+                favGame={props.favGame}
+                setFavGame={props.setFavGame}
+            />
             <main className="editepage">
                 <div className="editpage-link__wrapper">
                     <Link to="/write" id="link-patchwrite" hidden />
@@ -86,8 +90,7 @@ function Fetch(props) {
                     )}
                 </div>
             </main>
-        </div>
-        
+        </div>    
     )
 }
 

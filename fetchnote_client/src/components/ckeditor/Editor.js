@@ -31,13 +31,13 @@ import Uploader from "./Uploader";
 import LinkTitle from "./LinkTitle.js";
 import UploadAdapter from "./UploadAdapter";
 
-function MyCustomUploadAdapterPlugin(editor) {
-  editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-      return new UploadAdapter(loader)
-  }
-}
-
 const Editor = (props) => {
+  function MyCustomUploadAdapterPlugin(editor) {
+    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+        return new UploadAdapter(loader,props.uploader);
+    }
+  }
+
   return (
     <div id="patchWrite_body">
       <CKEditor

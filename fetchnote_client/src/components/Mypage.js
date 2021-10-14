@@ -4,14 +4,13 @@ import Sidebar from "./Sidebar";
 import "../css/Mypage.css"
 import axios from "axios";
 
-
-function Mypage({ accessToken, setIsLogin }){
+function Mypage({ BASE_URL, accessToken, favGame, setFavGame }){
     const history = useHistory();
     const [userinfo, setUserinfo] = useState({});
 
     async function getUserInfo() {
         console.log(accessToken);
-        let res = await axios.get('https://localhost:8080/user', {
+        let res = await axios.get(BASE_URL + 'user', {
             headers: {
                 authorization: accessToken
             }
@@ -35,7 +34,11 @@ function Mypage({ accessToken, setIsLogin }){
 
     return(
         <div>
-            <Sidebar accessToken={accessToken}/>
+            <Sidebar
+                accessToken={accessToken}
+                favGame = {favGame}
+                setFavGame = {setFavGame}
+            />
             <div className="mypage">
                 <div className="mypage_user">
                     <img alt="userProfile" src="img/user_profile.svg" height="60px"></img>

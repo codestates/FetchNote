@@ -16,16 +16,20 @@ const App = () => {
   const [accessToken,setAccessToken] = useState(undefined);
   const [curPatchId,changePatchId] = useState(-1);
   const [curGameId,changeGameId] = useState(-1);
+  const [favGame,setFavGame] = useState([]);
 
   const BASE_URL = "https://localhost:8080/";
 
-  useEffect(async () => {
-    const url = new URL(window.location.href)
-    const authorizationCode = url.searchParams.get('code')
-    if (authorizationCode) {
-      // authorization server로부터 클라이언트로 리디렉션된 경우, authorization code가 함께 전달된다.
-      await getAccessToken(authorizationCode);
+  useEffect(() => {
+    async function fetchToken() {
+      const url = new URL(window.location.href)
+      const authorizationCode = url.searchParams.get('code')
+      if (authorizationCode) {
+        // authorization server로부터 클라이언트로 리디렉션된 경우, authorization code가 함께 전달된다.
+        await getAccessToken(authorizationCode);
+      }
     }
+    fetchToken();
   },[])
 
   async function getAccessToken(authorizationCode) {
@@ -49,38 +53,53 @@ const App = () => {
           <Route exact path="/">
             {isLogin ? 
               <Main
-                accessToken={accessToken}
-                BASE_URL={BASE_URL}
-                curGameId={curGameId}
-                changeGameId={changeGameId}
+                accessToken = {accessToken}
+                BASE_URL = {BASE_URL}
+                curGameId = {curGameId}
+                changeGameId = {changeGameId}
+                favGame = {favGame}
+                setFavGame = {setFavGame}
               /> 
               : 
               <About />}
           </Route>
           <Route exact path="/patch">
             <Fetch
-              curGameId={curGameId}
+              BASE_URL = {BASE_URL}
+              curGameId = {curGameId}
               curPatchId = {curPatchId}
               changePatchId = {changePatchId}
               accessToken={accessToken}
+              favGame = {favGame}
+              setFavGame = {setFavGame}
             />
           </Route>
           <Route exact path="/fetchNote">
             <FetchNote
+              BASE_URL = {BASE_URL}
+              curGameId = {curGameId}
               curPatchId = {curPatchId}
               changePatchId = {changePatchId}
               accessToken = {accessToken}
+              favGame = {favGame}
+              setFavGame = {setFavGame}
             />
           </Route>
           <Route exact path="/write">
             <PatchWrite
+              BASE_URL = {BASE_URL}
               curPatchId = {curPatchId}
               accessToken={accessToken}
+              favGame = {favGame}
+              setFavGame = {setFavGame}
             />
           </Route>
           <Route exact path="/mypage">
             <Mypage
-              accessToken={accessToken}
+              BASE_URL = {BASE_URL}
+              accessToken = {accessToken}
+              favGame = {favGame}
+              setFavGame = {setFavGame}
               setIsLogin={setIsLogin}
             />
           </Route>
