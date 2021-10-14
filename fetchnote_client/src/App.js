@@ -1,7 +1,7 @@
 import { BrowserRouter, Switch, Route,  useHistory} from "react-router-dom";
 import Login from "./components/Login.js"; 
 import './css/App.css';
-import { Component, useEffect, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import Main from "./components/Main"
 import dotenv from "dotenv";
 import About from "./components/About.js";
@@ -15,6 +15,7 @@ class App extends Component {
     super();
     this.state = {
       isLogin: false,
+      accessToken: null
     };
     this.getAccessToken = this.getAccessToken.bind(this);
   }
@@ -24,9 +25,10 @@ class App extends Component {
     await axios.get(callbackURL, { params: { code: authorizationCode }})
           .then(res => {
             this.setState({
-              isLogin: true
+              isLogin: true,
+              accessToken: res.data
             });
-            console.log(res.data)
+            console.log(this.state.accessToken);
           })
           .catch(err => {
             console.log(err);
@@ -43,7 +45,7 @@ class App extends Component {
   }
 
   render() {
-    const { isLogin } = this.state;
+    const { isLogin, accessToken } = this.state;
     return (
       <div className="App">
         <BrowserRouter>
@@ -54,7 +56,7 @@ class App extends Component {
             <Route exact path="/">
               {
                 isLogin ? (
-                  <Main></Main>
+                  <Main accessToken={accessToken}></Main>
                 ) : (
                 <About/>
                 )
@@ -75,35 +77,5 @@ class App extends Component {
     );
   }
 }
-// 전에 있던 코드
-// function App() {
-//   const [userInfo, setUserInfo] = useState(true);
-//   return (
-//     <div className="App">
-//       <BrowserRouter>
-//         <Switch>
-//           <Route exact path="/login">
-//             <Login setUserInfo={setUserInfo}/>
-//           </Route>
-//           <Route exact path="/">
-//             {
-//               userInfo ? (
-//                 <Main></Main>
-//               ) : (
-//               <About/>
-//               )
-//             }
-//           </Route>
-//           <Route exact path="/patch">
-//             <Fetch/>
-//           </Route>
-//           <Route exact path="/write">
-//             <EditePatch/>
-//           </Route>
-//         </Switch>
-//       </BrowserRouter>
-//     </div>
-//   );
-// }
 
 export default App;
