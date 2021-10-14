@@ -7,7 +7,31 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const Main = (props) => {
-    // 게임리스트 불러오기
+    const [games,setGames] = useState([]);
+
+    const [r_1,reloadEffect_1] = useState(false);
+
+    const getGames = async () => {
+        try {
+            return await axios({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': props.accessToken,
+                },
+                method: 'get',
+                url: props.BASE_URL + "game",
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    useEffect(() => {
+        async function fetchGame () {
+            await getGames().then(resp => setGames(resp.data.games));
+        }
+        fetchGame();
+    },[r_1])
         
     return(
     <div>
@@ -22,7 +46,19 @@ const Main = (props) => {
                 </div>
             </div>
             <div className="contentGrid">
-                <GameBlock/>
+                {games.length === 0 ? (
+                    <div>Loading...</div>
+                ) : (
+                    games.map((el,idx) => {
+                        return(
+                            <GameBlock
+                                key={idx + 900}
+                                info={el}
+                                changeGameId={props.changeGameId}
+                            />
+                        )
+                    })
+                )}
             </div>
         </main>
     </div>

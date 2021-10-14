@@ -15,6 +15,9 @@ const App = () => {
   const [isLogin,setIsLogin] = useState(false);
   const [accessToken,setAccessToken] = useState(undefined);
   const [curPatchId,changePatchId] = useState(-1);
+  const [curGameId,changeGameId] = useState(-1);
+
+  const BASE_URL = "https://localhost:8080/";
 
   useEffect(async () => {
     const url = new URL(window.location.href)
@@ -26,7 +29,7 @@ const App = () => {
   },[])
 
   async function getAccessToken(authorizationCode) {
-    let callbackURL = 'https://localhost:8080/oauth';
+    let callbackURL = BASE_URL + 'oauth';
     await axios.get(callbackURL, { params: { code: authorizationCode }})
           .then(res => {
             return res.data;
@@ -44,10 +47,19 @@ const App = () => {
             <Login />
           </Route>
           <Route exact path="/">
-            {isLogin ? <Main accessToken={accessToken} /> : <About />}
+            {isLogin ? 
+              <Main
+                accessToken={accessToken}
+                BASE_URL={BASE_URL}
+                curGameId={curGameId}
+                changeGameId={changeGameId}
+              /> 
+              : 
+              <About />}
           </Route>
           <Route exact path="/patch">
             <Fetch
+              curGameId={curGameId}
               curPatchId = {curPatchId}
               changePatchId = {changePatchId}
               accessToken={accessToken}
@@ -56,7 +68,8 @@ const App = () => {
           <Route exact path="/fetchNote">
             <FetchNote
               curPatchId = {curPatchId}
-              accessToken={accessToken}
+              changePatchId = {changePatchId}
+              accessToken = {accessToken}
             />
           </Route>
           <Route exact path="/write">
@@ -66,7 +79,9 @@ const App = () => {
             />
           </Route>
           <Route exact path="/mypage">
-            <Mypage accessToken={accessToken}></Mypage>
+            <Mypage
+              accessToken={accessToken}
+            />
           </Route>
         </Switch>
       </BrowserRouter>

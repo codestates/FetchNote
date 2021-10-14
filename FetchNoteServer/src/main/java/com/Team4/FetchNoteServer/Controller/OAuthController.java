@@ -3,6 +3,7 @@ package com.Team4.FetchNoteServer.Controller;
 import com.Team4.FetchNoteServer.Domain.UserChangeInfoDTO;
 import com.Team4.FetchNoteServer.Domain.UserSignUpDTO;
 import com.Team4.FetchNoteServer.Entity.User;
+import com.Team4.FetchNoteServer.Repository.UserRepository;
 import com.Team4.FetchNoteServer.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -17,10 +18,12 @@ import java.util.Map;
 public class OAuthController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public OAuthController(UserService userService){
+    public OAuthController(UserService userService, UserRepository userRepository){
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping(value = "/oauth")
@@ -66,34 +69,58 @@ public class OAuthController {
     }
 
     @GetMapping(value = "/user")
-    public ResponseEntity<?> getUserInfo(@RequestHeader Map<String, String> header) {
-        try {
-            System.out.println("hat : " + header.get("authorization"));
-            // 헤더로 받아 온 액세스 토큰을 매개로 유저 정보를 가져온다.
-            HashMap<String, Object> userInfo = userService.getUserInfo(header.get("authorization"));
-            // 이메일을 통해 DB를 탐색하고 탐색한 유저의 정보를 전해준다.
-            User user = userService.FindUserByEmail((String)userInfo.get("email"));
-            // DB에 유저정보가 없다면, 아래와 같은 응답을 보내준다.
-            if(user == null) {
-                return ResponseEntity.badRequest().body(new HashMap<>() {{
-                    put("userinfo", null);
-                    put("message", "The user does not exist.");
+    public ResponseEntity<?> getUserInfo(@RequestHeader Map<String, String> header,
+                                         @RequestParam(required = false, defaultValue = "-404") long userId) {
+        if(userId == -404) {
+            try {
+                System.out.println("hat : " + header.get("authorization"));
+                // 헤더로 받아 온 액세스 토큰을 매개로 유저 정보를 가져온다.
+                HashMap<String, Object> userInfo = userService.getUserInfo(header.get("authorization"));
+                // 이메일을 통해 DB를 탐색하고 탐색한 유저의 정보를 전해준다.
+                User user = userService.FindUserByEmail((String) userInfo.get("email"));
+                // DB에 유저정보가 없다면, 아래와 같은 응답을 보내준다.
+                if (user == null) {
+                    return ResponseEntity.badRequest().body(new HashMap<>() {{
+                        put("userinfo", null);
+                        put("message", "The user does not exist.");
+                    }});
+                }
+                // DB에 유저정보가 있을 때, 유저의 정보를 아래와 같이 보내준다.
+                return ResponseEntity.ok().body(new HashMap<>() {{
+                    put("userinfo", new HashMap<>() {{
+                        put("id", user.getId());
+                        put("email", user.getEmail());
+                        put("nickname", user.getNickname());
+                        put("exp", user.getExp());
+                        // 세션확인 용도 나중에는 지워야한다. **
+                        // put("session", session.getId());
+                    }});
+                    put("message", "OK");
                 }});
+            } catch (Exception e) {
+                return ResponseEntity.status(500).body("err");
             }
-            // DB에 유저정보가 있을 때, 유저의 정보를 아래와 같이 보내준다.
-            return ResponseEntity.ok().body(new HashMap<>() {{
-                put("userinfo", new HashMap<>() {{
-                    put("id", user.getId());
-                    put("email", user.getEmail());
-                    put("nickname", user.getNickname());
-                    put("exp", user.getExp());
-                    // 세션확인 용도 나중에는 지워야한다. **
-                    // put("session", session.getId());
-                }});
-                put("message", "OK");
-            }});
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("err");
+        } else {
+            try {
+                User user = userRepository.FindById(userId);
+                return ResponseEntity.ok().body(new HashMap<>(){
+                    {
+                        put("info", new HashMap<>(){
+                            {
+                                put("nickname",user.getNickname());
+                                put("exp",user.getExp());
+                            }
+                        });
+                        put("message","ok");
+                    }
+                });
+            } catch (NullPointerException e) {
+                return ResponseEntity.badRequest().body(new HashMap<>(){
+                    {
+                        put("message", "can not find user");
+                    }
+                });
+            }
         }
     }
 

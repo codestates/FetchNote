@@ -77,6 +77,7 @@ public class GameController {
 
             for(Game game : list){
                 GameDTO el = new GameDTO();
+                el.setId(game.getId());
                 el.setName(game.getName());
                 el.setImage(game.getImage().toString());
                 result.add(el);

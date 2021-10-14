@@ -8,46 +8,165 @@ import Sidebar from "./Sidebar";
 import "../css/FetchNote.css";
 import axios from "axios";
 
-function FetchNote({ curPatchId, accessToken }){
+function FetchNote({ curPatchId, accessToken, changePatchId }){
     const [patchTitle,setPatchTitle] = useState("");
     const [patchBody,setPatchBody] = useState("");
     const [patchRight,setPatchRight] = useState(0);
     const [patchWrong,setPatchWrong] = useState(0);
-    const [patchUser,setPatchUser] = useState("");
+    const [patchUser,setPatchUser] = useState(0);
+    const [patchWriter,setPatchWriter] = useState("");
+    const [patchWriterExp,setPatchWriterExp] = useState(0);
+    const [comments,setComments] = useState([]);
+    const [np,setNP] = useState([-1,-1]);
+    const [curComment,setCurComment] = useState("");
 
-    const url = 'https://localhost:8080/patches?patchesId=' + curPatchId;
+    const [r_1,reloadEffect_1] = useState(false);
 
-    const getPatches = async () => {
+    const BASE_URL = "https://localhost:8080/";
+
+    const commentSync = (e) => {
+        setCurComment(e.target.value);
+    }
+
+    const getPatchList = async () => {
         try {
             return await axios({
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'authorization': accessToken,
                 },
                 method: 'get',
-                url: url,
+                url: BASE_URL + '/patches?gameId=' + 1,
             })
         } catch (e) {
             console.error(e);
         }
     }
 
+    const getPatches = async () => {
+        try {
+            return await axios({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': accessToken,
+                },
+                method: 'get',
+                url: BASE_URL + 'patches?patchesId=' + curPatchId,
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    const getWriter = async (id) => {
+        try {
+            return await axios({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': accessToken,
+                },
+                method: 'get',
+                url: BASE_URL + 'user?userId=' + id,
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    const postrating = async (str) => {
+        try {
+            return await axios({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': accessToken,
+                },
+                method: 'post',
+                url: BASE_URL + "rating/" + curPatchId,
+                data: {
+                    rating: str,
+                }
+            }).then(() => reloadEffect_1(!r_1));
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    const postComment = async () => {
+        if(curComment.length === 0) alert("댓글을 입력해주세요")
+        else {
+            try {
+                return await axios({
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authorization': accessToken,
+                    },
+                    method: 'post',
+                    url: BASE_URL + "comment",
+                    data: {
+                        patchId: curPatchId,
+                        comment: curComment,
+                    }
+                }).then(() => reloadEffect_1(!r_1));
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    }
+
+    const prevClick = () => {
+        if(np[0] === -1){
+            alert("이전 글이 없습니다.");
+        } else {
+            changePatchId(np[0]);
+            reloadEffect_1(!r_1);
+        }
+    }
+
+    const nextClick = () => {
+        if(np[1] === -1){
+            alert("다음 글이 없습니다.");
+        } else {
+            changePatchId(np[1]);
+            reloadEffect_1(!r_1);
+        }
+    }
+
     useEffect(() => {
-        getPatches().then(resp => {
-            const info = resp.data.info;
-            setPatchBody(info.body);
-            setPatchTitle(info.title);
-            setPatchRight(info.right);
-            setPatchWrong(info.wrong);
-            setPatchUser(info.userId);
-        })
-    },[patchTitle])
+        let info = null;
+        async function fetchPatch () {
+            await getPatches().then(resp => {
+                info = resp.data.info;
+                setComments(resp.data.comments);
+            }).then(() => {
+                setPatchUser(info.userId);
+                setPatchBody(info.body);
+                setPatchTitle(info.title);
+                setPatchRight(info.right);
+                setPatchWrong(info.wrong);
+                getWriter(info.userId).then(resp => {
+                    setPatchWriter(resp.data.info.nickname);
+                    setPatchWriterExp(resp.data.info.exp);
+                })
+                getPatchList().then(resp => {
+                    const list = [];
+                    resp.data.patches.map(el => list.push(el.patchesId));
+                    const cur = list.indexOf(curPatchId);
+                    const arr = [-1, -1];
+                    if(cur > 0) arr[0] = list[cur-1];
+                    if(cur < list.length - 1) arr[1] = list[cur+1];
+                    setNP(arr);
+                })
+            });
+        }
+        fetchPatch();
+    },[r_1]);
 
     return (
         <div>
             <Sidebar accessToken={accessToken}/>
             <div className="patchNote">
                 <div className="petchNote_body">
-                    { patchTitle === "" ? 
+                    { patchWriter === "" ? 
                     (
                         <div>내용이 없습니다</div>
                     )
@@ -55,39 +174,49 @@ function FetchNote({ curPatchId, accessToken }){
                     (
                         <div>
                             <h1>{patchTitle}</h1>
-                            <div>작성자 : {patchUser}</div>
-                            <div>경험치 : userinfo 어떻게할지</div>
+                            <div>작성자 : {patchWriter}</div>
+                            <div>경험치 : {patchWriterExp}</div>
                             <div dangerouslySetInnerHTML={{__html: patchBody}}></div>
                         </div>
                     )}
                 </div>
                 <div className="petchNote_likeBtns">
-                    <button>
+                    <button onClick={() => postrating("right")}>
                         <FontAwesomeIcon icon={faThumbsUp} size="2x"></FontAwesomeIcon>
                     </button>
                     <span>{patchRight}</span>
-                    <button>
+                    <button onClick={() => postrating("wrong")}>
                         <FontAwesomeIcon icon={faThumbsDown} size="2x"></FontAwesomeIcon>
                     </button>
                     <span>{patchWrong}</span>
                 </div>
                 <div className="patchNote_btns">
-                    <Link to="/fetchnote">
-                        <span>이전</span>
-                    </Link>
+                    <Link to="/fetchnote" id="link-prev"/>
+                    <a onClick={prevClick}>이전</a>
                     <Link to="/patch">
                         <span>목록</span>
                     </Link>
-                    <Link to="/fetchnote">
-                        <span>다음</span>
-                    </Link>
+                    <Link to="/fetchnote" id="link-next"/>
+                    <a onClick={nextClick}>다음</a>
                 </div>
                 <div className="commentList">
-                    <Comment></Comment>
-                    <Comment></Comment>
+                    {comments.length === 0 ? 
+                    (
+                        <div>Loading...</div>
+                    ) : 
+                    (
+                        comments.map((el,idx) => {
+                            return(
+                                <Comment
+                                    key={idx + 1000}
+                                    info={el}
+                                />
+                            )
+                        })
+                    )}
                     <div className="commentList_input">
-                        <input type="text" placeholder="의견을 표현해보세요"></input>
-                        <button>입력</button>
+                        <input type="text" placeholder="의견을 표현해보세요" onChange={commentSync}></input>
+                        <button onClick={postComment}>입력</button>
                     </div>
                 </div>
             </div>
