@@ -2,11 +2,35 @@ import PatchnoteBlock from "./PatchnoteBlock";
 import Sidebar from "./Sidebar"
 import "../css/Fetch.css"
 import { Switch, Link, Redirect, Route } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PatchWrite from "./PatchWrite";
 
 function Fetch(props) {
+    const [patchList,setPatchList] = useState([]);
+
+    const url = 'https://localhost:8080/patches?gameId=' + 1;
+
+    const getPatchList = async () => {
+        try {
+            return await axios({
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'get',
+                url: url,
+            })
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    useEffect(async () => {
+        await getPatchList().then(resp => {
+            setPatchList(resp.data.patches);
+        })
+    },[])
+
     const writePatch = async () => {
         let suc = true;
 
@@ -39,8 +63,6 @@ function Fetch(props) {
         });
     }
 
-    
-
     return(
         <div>
             <Sidebar accessToken={props.accessToken}/>
@@ -50,10 +72,17 @@ function Fetch(props) {
                 </div>
                 <button className="editpage-link" onClick={writePatch}>패치 작성</button>
                 <div className="subContent_wrapper">
-                    <PatchnoteBlock/>
-                    <PatchnoteBlock/>
-                    <PatchnoteBlock/>
-                    <PatchnoteBlock/>
+                    {patchList.length === 0 ? <div>Loading...</div> : (
+                        patchList.map((el, idx) => {
+                            return (
+                            <PatchnoteBlock 
+                                key={idx + 1000000}
+                                info={el}
+                                changePatchId = {props.changePatchId}
+                            />
+                            )
+                        })
+                    )}
                 </div>
             </main>
         </div>

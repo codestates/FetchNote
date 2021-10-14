@@ -52,6 +52,7 @@ public class PatchesController {
 
             for(Patches el : patchesList){
                 PatchesDTO dto = new PatchesDTO();
+                dto.setPatchesId(el.getId());
                 dto.setUserId(el.getUser().getId());
                 dto.setGameId(el.getGame().getId());
                 dto.setTitle(el.getTitle());
