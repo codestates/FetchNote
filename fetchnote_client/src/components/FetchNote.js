@@ -8,7 +8,7 @@ import Sidebar from "./Sidebar";
 import "../css/FetchNote.css";
 import axios from "axios";
 
-function FetchNote({ curPatchId, accessToken, changePatchId }){
+function FetchNote({ BASE_URL, curGameId, curPatchId, accessToken, changePatchId, favGame, setFavGame }){
     const [patchTitle,setPatchTitle] = useState("");
     const [patchBody,setPatchBody] = useState("");
     const [patchRight,setPatchRight] = useState(0);
@@ -22,8 +22,6 @@ function FetchNote({ curPatchId, accessToken, changePatchId }){
 
     const [r_1,reloadEffect_1] = useState(false);
 
-    const BASE_URL = "https://localhost:8080/";
-
     const commentSync = (e) => {
         setCurComment(e.target.value);
     }
@@ -36,7 +34,7 @@ function FetchNote({ curPatchId, accessToken, changePatchId }){
                     'authorization': accessToken,
                 },
                 method: 'get',
-                url: BASE_URL + '/patches?gameId=' + 1,
+                url: BASE_URL + '/patches?gameId=' + curGameId,
             })
         } catch (e) {
             console.error(e);
@@ -163,7 +161,11 @@ function FetchNote({ curPatchId, accessToken, changePatchId }){
 
     return (
         <div>
-            <Sidebar accessToken={accessToken}/>
+            <Sidebar
+                accessToken={accessToken}
+                favGame = {favGame}
+                setFavGame={setFavGame}
+            />
             <div className="patchNote">
                 <div className="petchNote_body">
                     { patchWriter === "" ? 
@@ -202,7 +204,7 @@ function FetchNote({ curPatchId, accessToken, changePatchId }){
                 <div className="commentList">
                     {comments.length === 0 ? 
                     (
-                        <div>Loading...</div>
+                        <div></div>
                     ) : 
                     (
                         comments.map((el,idx) => {

@@ -31,7 +31,7 @@ const PatchWrite = (props) => {
                     'authorization': props.accessToken,
                   },
                   method: 'patch',
-                  url: 'https://localhost:8080/patches' + '/' + patchId,
+                  url: props.BASE_URL + 'patches' + '/' + patchId,
                   data: {
                       gameId,
                       title: titleText,
@@ -63,7 +63,7 @@ const PatchWrite = (props) => {
         <Editor
             data={""}
             uploadFolder="Test"
-            uploader="bloodseeker"
+            uploader={patchId}
             onChange={(event, editor) => {
                 setBodyText(editor.getData());
             }}
