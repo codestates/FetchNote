@@ -84,22 +84,15 @@ public class GameController {
             }
 
             try {
-                // dummy data : image send test
-                BufferedImage originalImage = ImageIO.read(new File("/Users/gimchan-ug/Desktop/codestates/FetchNote/FetchNoteServer/src/main/resources/image/test_image.png"));
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(originalImage, "png", baos);
-                String image = Arrays.toString(baos.toByteArray());
-
                 return ResponseEntity.ok().body(
                     new HashMap<>(){
                         {
                             put("games", result);
-                            put("test_image", image);
                             put("message", "ok");
                         }
                     }
                 );
-            } catch (IOException e) {
+            } catch (Exception e) {
                 return ResponseEntity.badRequest().body(e);
             }
         }
