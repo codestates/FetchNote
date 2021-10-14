@@ -69,3 +69,10 @@
     font-weight: 800;
     font-size: 15px;
 }
+.text-wrapper{
+    padding: 0 25px;
+}
+.text-left{
+    text-align: left;
+
+}
