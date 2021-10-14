@@ -69,8 +69,9 @@ function Fetch(props) {
             <main className="editepage">
                 <div className="editpage-link__wrapper">
                     <Link to="/write" id="link-patchwrite" hidden />
+                    <button className="editpage-link" onClick={writePatch}>패치 작성</button>
                 </div>
-                <button className="editpage-link" onClick={writePatch}>패치 작성</button>
+                
                 <div className="subContent_wrapper">
                     {patchList.length === 0 ? <div>Loading...</div> : (
                         patchList.map((el, idx) => {

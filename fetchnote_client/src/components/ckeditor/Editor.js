@@ -39,7 +39,7 @@ function MyCustomUploadAdapterPlugin(editor) {
 
 const Editor = (props) => {
   return (
-    <div>
+    <div id="patchWrite_body">
       <CKEditor
         onReady={(editor) => {
           editor.ui

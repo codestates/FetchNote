@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "../css/ckContent.css";
 import "../css/PatchWrite.css";
+import Sidebar from "./Sidebar";
 
 const PatchWrite = (props) => {
     const [patchId, setPatchId] = useState(props.curPatchId);
@@ -51,13 +52,13 @@ const PatchWrite = (props) => {
     }
 
     return (
-      <div>
+      <div id="patchWrite">
         <Link to="/fetchNote" id="link-fetchnote" hidden />
         <div id="patchWrite_header">
-            <input type="button" value="전송" id="patchWrite_send" onClick={textsend} />
+            <input id="patchWrite_header_btn" type="button" value="전송" id="patchWrite_send" onClick={textsend} />
         </div>
-        <div>
-            <input id="patchWrite_title" type="text" onChange={getTitleText} />
+        <div id="patchWrite_title">
+            <input id="patchWrite_title_input" type="text" placeholder="제목을 입력하세요" onChange={getTitleText} />
         </div>
         <Editor
             data={""}
