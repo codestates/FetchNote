@@ -13,9 +13,13 @@ function FetchNote({ curPatchId, accessToken }){
     const [patchBody,setPatchBody] = useState("");
     const [patchRight,setPatchRight] = useState(0);
     const [patchWrong,setPatchWrong] = useState(0);
-    const [patchUser,setPatchUser] = useState("");
+    const [patchUser,setPatchUser] = useState(0);
+    const [patchWriter,setPatchWriter] = useState("");
+    const [patchWriterExp,setPatchWriterExp] = useState(0);
 
-    const url = 'https://localhost:8080/patches?patchesId=' + curPatchId;
+    const [r_1,reloadEffect_1] = useState(false);
+
+    const BASE_URL = "https://localhost:8080/";
 
     const getPatches = async () => {
         try {
@@ -24,30 +28,70 @@ function FetchNote({ curPatchId, accessToken }){
                     'Content-Type': 'application/json'
                 },
                 method: 'get',
-                url: url,
-            })
+                url: BASE_URL + 'patches?patchesId=' + curPatchId,
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    const getWriter = async (id) => {
+        try {
+            return await axios({
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'get',
+                url: BASE_URL + 'user?userId=' + id,
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    const postrating = async (str) => {
+        try {
+            return await axios({
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                method: 'post',
+                url: BASE_URL + "/rating/" + curPatchId,
+                data: {
+                    rating: str,
+                }
+            }).then(() => reloadEffect_1(!r_1));
         } catch (e) {
             console.error(e);
         }
     }
 
     useEffect(() => {
-        getPatches().then(resp => {
-            const info = resp.data.info;
-            setPatchBody(info.body);
-            setPatchTitle(info.title);
-            setPatchRight(info.right);
-            setPatchWrong(info.wrong);
-            setPatchUser(info.userId);
-        })
-    },[patchTitle])
+        let info = null;
+        async function fetchPatch () {
+            await getPatches().then(resp => {
+                info = resp.data.info;
+            }).then(() => {
+                setPatchUser(info.userId);
+                setPatchBody(info.body);
+                setPatchTitle(info.title);
+                setPatchRight(info.right);
+                setPatchWrong(info.wrong);
+                getWriter(info.userId).then(resp => {
+                    setPatchWriter(resp.data.info.nickname);
+                    setPatchWriterExp(resp.data.info.exp);
+                });
+            });
+        }
+        fetchPatch();
+    },[r_1]);
 
     return (
         <div>
             <Sidebar accessToken={accessToken}/>
             <div className="patchNote">
                 <div className="petchNote_body">
-                    { patchTitle === "" ? 
+                    { patchWriter === "" ? 
                     (
                         <div>내용이 없습니다</div>
                     )
@@ -55,18 +99,18 @@ function FetchNote({ curPatchId, accessToken }){
                     (
                         <div>
                             <h1>{patchTitle}</h1>
-                            <div>작성자 : {patchUser}</div>
-                            <div>경험치 : userinfo 어떻게할지</div>
+                            <div>작성자 : {patchWriter}</div>
+                            <div>경험치 : {patchWriterExp}</div>
                             <div dangerouslySetInnerHTML={{__html: patchBody}}></div>
                         </div>
                     )}
                 </div>
                 <div className="petchNote_likeBtns">
-                    <button>
+                    <button onClick={() => postrating("right")}>
                         <FontAwesomeIcon icon={faThumbsUp} size="2x"></FontAwesomeIcon>
                     </button>
                     <span>{patchRight}</span>
-                    <button>
+                    <button onClick={() => postrating("wrong")}>
                         <FontAwesomeIcon icon={faThumbsDown} size="2x"></FontAwesomeIcon>
                     </button>
                     <span>{patchWrong}</span>

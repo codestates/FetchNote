@@ -22,7 +22,7 @@ function PatchnoteBlock({ info, changePatchId }){
 
     return(
         <div className="patchnote_block" onClick={clickLink}>
-            <Link to="/fetchnote" id={"fetchnote" + patchesId}/>
+            <Link to="/fetchnote" id={"fetchnote" + patchesId} hidden/>
             <div>{title}</div>
             <div>{right}</div>
             <div>{wrong}</div>
