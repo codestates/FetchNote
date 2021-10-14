@@ -174,32 +174,39 @@ function FetchNote({ BASE_URL, curGameId, curPatchId, accessToken, changePatchId
                     )
                     : 
                     (
-                        <div>
+                        <div className="text-left text-wrapper"> 
                             <h1>{patchTitle}</h1>
-                            <div>작성자 : {patchWriter}</div>
-                            <div>경험치 : {patchWriterExp}</div>
-                            <div dangerouslySetInnerHTML={{__html: patchBody}}></div>
+                            <div className="tet-left">작성자 : {patchWriter}</div>
+                            <div className="text-left">경험치 : {patchWriterExp}</div>
+                            <div dangerouslySetInnerHTML={{__html: patchBody} } className="text-left"></div>
                         </div>
                     )}
                 </div>
                 <div className="petchNote_likeBtns">
-                    <button onClick={() => postrating("right")}>
-                        <FontAwesomeIcon icon={faThumbsUp} size="2x"></FontAwesomeIcon>
-                    </button>
-                    <span>{patchRight}</span>
+                    <div className="petchNote_likeBtns_likeBtn.">
+                        <button onClick={() => postrating("right")}>
+                            <FontAwesomeIcon icon={faThumbsUp} size="2x"></FontAwesomeIcon>
+                        </button>
+                        <span>{patchRight}</span>
+                    </div>
+                    
+                    <div ></div>
                     <button onClick={() => postrating("wrong")}>
                         <FontAwesomeIcon icon={faThumbsDown} size="2x"></FontAwesomeIcon>
                     </button>
                     <span>{patchWrong}</span>
                 </div>
                 <div className="patchNote_btns">
-                    <Link to="/fetchnote" id="link-prev"/>
-                    <a onClick={prevClick}>이전</a>
+                    <Link to="/fetchnote" id="link-prev" onClick={prevClick}>
+                        <span>이전</span>
+                    </Link>
+                    
                     <Link to="/patch">
                         <span>목록</span>
                     </Link>
-                    <Link to="/fetchnote" id="link-next"/>
-                    <a onClick={nextClick}>다음</a>
+                    <Link to="/fetchnote" id="link-next" onClick={nextClick}>
+                        <span>다음</span>
+                    </Link>
                 </div>
                 <div className="commentList">
                     {comments.length === 0 ? 

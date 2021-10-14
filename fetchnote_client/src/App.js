@@ -100,6 +100,7 @@ const App = () => {
               accessToken = {accessToken}
               favGame = {favGame}
               setFavGame = {setFavGame}
+              setIsLogin={setIsLogin}
             />
           </Route>
         </Switch>

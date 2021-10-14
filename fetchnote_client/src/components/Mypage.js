@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import "../css/Mypage.css"
 import axios from "axios";
 
 function Mypage({ BASE_URL, accessToken, favGame, setFavGame }){
+    const history = useHistory();
     const [userinfo, setUserinfo] = useState({});
 
     async function getUserInfo() {
@@ -15,6 +16,16 @@ function Mypage({ BASE_URL, accessToken, favGame, setFavGame }){
             }
         });
         setUserinfo(res.data.userinfo);
+    }
+
+    async function handleLogout() {
+        let res = await axios.get('https://localhost:8080/logout', {
+            headers: {
+                authorization: accessToken
+            }
+        });
+        setIsLogin(false);
+        history.push('/');
     }
 
     useEffect(() => {
@@ -38,7 +49,7 @@ function Mypage({ BASE_URL, accessToken, favGame, setFavGame }){
                     
                 </div>
                 <div className="mypage_btn">
-                    <button>로그아웃</button>
+                    <button onClick = {handleLogout}>로그아웃</button>
                 </div>
                 <div className="mypage_btn">
                     <button>이름 바꾸기</button>

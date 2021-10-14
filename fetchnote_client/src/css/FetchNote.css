@@ -23,6 +23,10 @@
     background-color: rgb(223, 219, 219);
 }
 
+.petchNote_likeBtns button{
+    margin: 0 10px;
+}
+
 .patchNote_btns{
     display: flex;
     justify-content: space-between;
@@ -31,7 +35,14 @@
     border-right: 1px solid rgb(138, 138, 138);
     padding: 0 10px 10px 10px;
     background-color: rgb(223, 219, 219);
+    width: 100%;
+    box-sizing: border-box;
 }
+.patchNote_btns a{
+    text-decoration: none;
+    color: black;
+}
+
 .commentList_input{
     position: relative;
     margin: 10px 0;
@@ -57,4 +68,11 @@
     color: whitesmoke;
     font-weight: 800;
     font-size: 15px;
+}
+.text-wrapper{
+    padding: 0 25px;
+}
+.text-left{
+    text-align: left;
+
 }
