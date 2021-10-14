@@ -5,9 +5,9 @@ import { Component, useEffect, useState } from "react";
 import Main from "./components/Main"
 import dotenv from "dotenv";
 import About from "./components/About.js";
-import EditePatch from "./components/EditePatch.js";
 import Fetch from "./components/Fetch.js";
 import axios from 'axios';
+import FetchNote from "./components/FetchNote.js";
 import PatchWrite from "./components/PatchWrite.js";
 
 class App extends Component {
@@ -62,9 +62,11 @@ class App extends Component {
             <Route exact path="/patch">
               <Fetch/>
             </Route>
-            <Route exact path="/write">
-              <PatchWrite />
+            <Route exact path="/fetchNote">
+              <FetchNote/>
             </Route>
+            <Route exact path="/write" component={PatchWrite} />
+            <Route exact path="/mypage"></Route>
           </Switch>
         </BrowserRouter>
       </div>
