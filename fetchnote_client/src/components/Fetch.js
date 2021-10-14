@@ -43,7 +43,7 @@ function Fetch(props) {
 
     return(
         <div>
-            <Sidebar />
+            <Sidebar accessToken={props.accessToken}/>
             <main className="editepage">
                 <div className="editpage-link__wrapper">
                     <Link to="/write" id="link-patchwrite" hidden />

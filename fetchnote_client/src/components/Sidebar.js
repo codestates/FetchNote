@@ -1,16 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {Link} from "react-router-dom";
 import {faHome} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../css/Sidebar.css";
+import axios from "axios";
 
 function Sidebar(props){
     // 좋아하는 게임 목록을 받아와 출력을 해야 한다
-    const { userinfo } = props;
+    // const { userinfo } = props;
+    const { accessToken } = props;
     const [likeGames , SetLikeGames] = useState(1); 
+    const [userinfo, setUserinfo] = useState({});
+
+    async function getUserInfo() {
+        console.log(accessToken);
+        let res = await axios.get('https://localhost:8080/user', {
+            headers: {
+                authorization: accessToken
+            }
+        });
+        setUserinfo(res.data.userinfo);
+    }
+
     function click(){
         console.log("버튼이 눌렀습니다");
     }
+
+    useEffect(() => {
+        getUserInfo();
+    }, []);
+
     return (
         <nav className="navigationBar">
             {/* 로고
