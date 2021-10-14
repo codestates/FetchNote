@@ -1,16 +1,17 @@
 import "../css/Comment.css"
 
-function Comment(){
+function Comment({ info }){
+    const { comment, createdAt, nickname, updatedAt } = info;
+
     return (
         <div className="comment">
             <div className="comment_header">
-                <span className="comment_header_nickName"> name</span>
+                <span className="comment_header_nickName">{nickname}</span>
+                <span>{createdAt.slice(0,10) + "-" + createdAt.slice(11,19)}</span>
                 <button>수정</button>
             </div>
             <div className="comment_body">
-                <span>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dignissimos suscipit nulla sed porro blanditiis quaerat! Similique dolore inventore perspiciatis maiores a. Deleniti atque similique tempora dignissimos doloribus a ab fugit!
-                </span>
+                <span>{comment}</span>
             </div>
         </div>
     )

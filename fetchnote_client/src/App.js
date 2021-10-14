@@ -56,7 +56,8 @@ const App = () => {
           <Route exact path="/fetchNote">
             <FetchNote
               curPatchId = {curPatchId}
-              accessToken={accessToken}
+              changePatchId = {changePatchId}
+              accessToken = {accessToken}
             />
           </Route>
           <Route exact path="/write">

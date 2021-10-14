@@ -26,7 +26,8 @@ const PatchWrite = (props) => {
             try {
                 return await axios({
                   headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'authorization': props.accessToken,
                   },
                   method: 'patch',
                   url: 'https://localhost:8080/patches' + '/' + patchId,

@@ -28,8 +28,8 @@ public class CommentRepository {
 
     // DB Comment 테이블에 매개변수 comment와 id, userId의 데이터를 사용하여 코멘트 정보를 저장한다.
     // 패치에 대한 아이디도 처리해야 한다. ** (패치 엔티티가 생기면!)
-    public void CreateComment(CommentInputDTO commentInputDTO) {
-        User user = entityManager.find(User.class, commentInputDTO.getUserId());
+    public void CreateComment(User user, CommentInputDTO commentInputDTO) {
+        //        User user = entityManager.find(User.class, commentInputDTO.getUserId());
         Patches patches = entityManager.find(Patches.class, commentInputDTO.getPatchId());
         PatchComment com = new PatchComment();
         com.setUser(user);

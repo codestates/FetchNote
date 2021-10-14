@@ -9,16 +9,15 @@ import PatchWrite from "./PatchWrite";
 function Fetch(props) {
     const [patchList,setPatchList] = useState([]);
 
-    const url = 'https://localhost:8080/patches?gameId=' + 1;
-
     const getPatchList = async () => {
         try {
             return await axios({
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'authorization': props.accessToken,
                 },
                 method: 'get',
-                url: url,
+                url: 'https://localhost:8080/patches?gameId=' + 1,
             })
         } catch (e) {
             console.error(e);
@@ -38,7 +37,8 @@ function Fetch(props) {
             try {
                 return await axios({
                     headers: {
-                      'Content-Type': 'application/json'
+                      'Content-Type': 'application/json',
+                      'authorization': props.accessToken,
                     },
                     method: 'post',
                     url: 'https://localhost:8080/patches',
