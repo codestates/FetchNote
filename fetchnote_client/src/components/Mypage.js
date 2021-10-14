@@ -1,17 +1,36 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import "../css/Mypage.css"
+import axios from "axios";
 
-function Mypage(){
+function Mypage(props){
+    const { accessToken } = props;
+    const [userinfo, setUserinfo] = useState({});
+
+    async function getUserInfo() {
+        console.log(accessToken);
+        let res = await axios.get('https://localhost:8080/user', {
+            headers: {
+                authorization: accessToken
+            }
+        });
+        setUserinfo(res.data.userinfo);
+    }
+
+    useEffect(() => {
+        getUserInfo();
+    }, []);
+
     return(
         <div>
-            <Sidebar/>
+            <Sidebar accessToken={accessToken}/>
             <div className="mypage">
                 <div className="mypage_user">
                     <img alt="userProfile" src="img/user_profile.svg" height="60px"></img>
                     <div className="mypage_user_info">
-                        <span className="mypage_user_nickname">Give Me A Job</span>
-                        <span className="mypage_user_level">100,000</span>
+                        <span className="mypage_user_nickname">{userinfo.nickname}</span>
+                        <span className="mypage_user_level">{userinfo.exp}</span>
                     </div>
                     
                 </div>
@@ -32,5 +51,4 @@ function Mypage(){
        
     )
 }
-
 export default Mypage;

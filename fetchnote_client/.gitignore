@@ -24,3 +24,7 @@ yarn-debug.log*
 yarn-error.log*
 
 package-lock.json
+
+./cert
+localhost+2-key.pem
+localhost+2.pem

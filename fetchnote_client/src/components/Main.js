@@ -9,32 +9,13 @@ import axios from "axios";
 class Main extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            userinfo: {}
-        }
     }
 
-    async getUserInfo() {
-        const { accessToken }  = this.props
-        console.log(accessToken);
-        let res = await axios.get('https://localhost:8080/user', {
-            headers: {
-                authorization: accessToken
-            }
-        });
-        this.setState({
-          userinfo: res.data.userinfo
-        })
-    }
-
-    componentDidMount() {
-        this.getUserInfo();
-    }
-    
     render() {
+        const { accessToken } = this.props;
         return(
         <div>
-            <Sidebar userinfo={this.state.userinfo}/>
+            <Sidebar accessToken={accessToken}/>
             <main>
                 <div className="wrapper">
                     <div className="searchBox">
