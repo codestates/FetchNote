@@ -181,23 +181,30 @@ function FetchNote({ curPatchId, accessToken, changePatchId }){
                     )}
                 </div>
                 <div className="petchNote_likeBtns">
-                    <button onClick={() => postrating("right")}>
-                        <FontAwesomeIcon icon={faThumbsUp} size="2x"></FontAwesomeIcon>
-                    </button>
-                    <span>{patchRight}</span>
+                    <div className="petchNote_likeBtns_likeBtn.">
+                        <button onClick={() => postrating("right")}>
+                            <FontAwesomeIcon icon={faThumbsUp} size="2x"></FontAwesomeIcon>
+                        </button>
+                        <span>{patchRight}</span>
+                    </div>
+                    
+                    <div ></div>
                     <button onClick={() => postrating("wrong")}>
                         <FontAwesomeIcon icon={faThumbsDown} size="2x"></FontAwesomeIcon>
                     </button>
                     <span>{patchWrong}</span>
                 </div>
                 <div className="patchNote_btns">
-                    <Link to="/fetchnote" id="link-prev"/>
-                    <a onClick={prevClick}>이전</a>
+                    <Link to="/fetchnote" id="link-prev" onClick={prevClick}>
+                        <span>이전</span>
+                    </Link>
+                    
                     <Link to="/patch">
                         <span>목록</span>
                     </Link>
-                    <Link to="/fetchnote" id="link-next"/>
-                    <a onClick={nextClick}>다음</a>
+                    <Link to="/fetchnote" id="link-next" onClick={nextClick}>
+                        <span>다음</span>
+                    </Link>
                 </div>
                 <div className="commentList">
                     {comments.length === 0 ? 
