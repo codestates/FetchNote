@@ -9,73 +9,66 @@ import Fetch from "./components/Fetch.js";
 import axios from 'axios';
 import FetchNote from "./components/FetchNote.js";
 import Mypage from "./components/Mypage.js"
+import PatchWrite from "./components/PatchWrite.js";
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      isLogin: false,
-      accessToken: null
-    };
-    this.getAccessToken = this.getAccessToken.bind(this);
-  }
+const App = () => {
+  const [isLogin,setIsLogin] = useState(false);
+  const [accessToken,setAccessToken] = useState("");
+  const [curPatchId,changePatchId] = useState(-1);
 
-  async getAccessToken(authorizationCode) {
+  useEffect(() => {
+    const url = new URL(window.location.href)
+    const authorizationCode = url.searchParams.get('code')
+    if (authorizationCode) {
+      // authorization server로부터 클라이언트로 리디렉션된 경우, authorization code가 함께 전달된다.
+      setAccessToken(authorizationCode);
+      getAccessToken(accessToken);
+    }
+  },[])
+
+  async function getAccessToken(authorizationCode) {
     let callbackURL = 'https://localhost:8080/oauth';
     await axios.get(callbackURL, { params: { code: authorizationCode }})
           .then(res => {
-            this.setState({
-              isLogin: true,
-              accessToken: res.data
-            });
-            console.log(this.state.accessToken);
+            setIsLogin(true);
+            setAccessToken(res.data)
           })
           .catch(err => {
             console.log(err);
           });
   }
 
-  async componentDidMount() {
-    const url = new URL(window.location.href)
-    const authorizationCode = url.searchParams.get('code')
-    if (authorizationCode) {
-      // authorization server로부터 클라이언트로 리디렉션된 경우, authorization code가 함께 전달된다.
-      this.getAccessToken(authorizationCode)
-    }
-  }
-
-  render() {
-    const { isLogin, accessToken } = this.state;
-    return (
-      <div className="App">
-        <BrowserRouter>
-          <Switch>
-            <Route exact path="/login">
-              <Login />
-            </Route>
-            <Route exact path="/">
-              {
-                isLogin ? (
-                  <Main accessToken={accessToken}></Main>
-                ) : (
-                <About/>
-                )
-              }
-            </Route>
-            <Route exact path="/patch">
-              <Fetch/>
-            </Route>
-            <Route exact path="/fetchNote">
-              <FetchNote/>
-            </Route>
-            <Route exact path="/mypage">
-              <Mypage/>
-            </Route>
-          </Switch>
-        </BrowserRouter>
-      </div>
-    );
-  }
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/login">
+            <Login />
+          </Route>
+          <Route exact path="/">
+            {isLogin ? <Main accessToken={accessToken} /> : <About />}
+          </Route>
+          <Route exact path="/patch">
+            <Fetch
+              curPatchId = {curPatchId}
+              changePatchId = {changePatchId}
+            />
+          </Route>
+          <Route exact path="/fetchNote">
+            <FetchNote
+              curPatchId = {curPatchId}
+            />
+          </Route>
+          <Route exact path="/write">
+            <PatchWrite
+              curPatchId = {curPatchId}
+            />
+          </Route>
+          <Route exact path="/mypage"></Route>
+        </Switch>
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;

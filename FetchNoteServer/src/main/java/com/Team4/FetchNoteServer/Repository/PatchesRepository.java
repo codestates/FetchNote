@@ -1,5 +1,7 @@
 package com.Team4.FetchNoteServer.Repository;
 
+import com.Team4.FetchNoteServer.Controller.ImageController;
+import com.Team4.FetchNoteServer.Domain.ImageDTO;
 import com.Team4.FetchNoteServer.Domain.PatchesDTO;
 import com.Team4.FetchNoteServer.Entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,12 @@ import java.util.List;
 public class PatchesRepository {
 
     private final EntityManager entityManager;
+    private final ImageController imageController;
 
     @Autowired
-    public PatchesRepository(EntityManager entityManager) {
+    public PatchesRepository(EntityManager entityManager, ImageController imageController) {
         this.entityManager = entityManager;
+        this.imageController = imageController;
     }
 
     public List<Patches> FindByGameId (long gameId) {
@@ -60,7 +64,11 @@ public class PatchesRepository {
 
         for(PatchComment el : comments) entityManager.remove(el);
         for(CheckedPatch el : checkedPatches) entityManager.remove(el);
-        for(Image el : images) entityManager.remove(el);
+        for(Image el : images) {
+            ImageDTO dto = new ImageDTO();
+            dto.setImageId(el.getId());
+            imageController.DeleteImage(dto);
+        }
 
         entityManager.remove(patches);
         entityManager.flush();

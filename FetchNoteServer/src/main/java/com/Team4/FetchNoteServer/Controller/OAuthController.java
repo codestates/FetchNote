@@ -43,6 +43,7 @@ public class OAuthController {
             // DB에 해당 유저정보가 있는지 확인한다.
             User user = userService.FindUserByEmail((String)userInfo.get("email"));
 
+            System.out.println("session : " + session.getId());
             // 유저정보가 없다면, DB > User table에 저장을 한다.
             if(user == null) {
                 UserSignUpDTO userSignUpDTO = new UserSignUpDTO();

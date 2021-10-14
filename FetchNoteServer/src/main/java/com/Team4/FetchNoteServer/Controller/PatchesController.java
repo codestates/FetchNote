@@ -129,7 +129,12 @@ public class PatchesController {
             Patches patches = patchesService.RegisterPatches(user, game, data);
             checkedPatchRepository.AddCheckedPatch(patches, userId);
 
-            return ResponseEntity.ok().body(messageOk);
+            return ResponseEntity.ok().body(new HashMap<>(){
+                {
+                    put("id", patches.getId());
+                    put("message", "ok");
+                }
+            });
         } catch (IllegalArgumentException | NullPointerException e) {
             return ResponseEntity.badRequest().body(e);
         }
