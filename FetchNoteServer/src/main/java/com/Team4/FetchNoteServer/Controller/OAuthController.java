@@ -9,7 +9,6 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ import java.util.Map;
 public class OAuthController {
 
     private final UserService userService;
-    public static HttpSession session;
+
     @Autowired
     public OAuthController(UserService userService){
         this.userService = userService;
@@ -33,17 +32,9 @@ public class OAuthController {
             HashMap<String, Object> userInfo = userService.getUserInfo(access_Token);
             System.out.println("login Controller : " + userInfo);
 
-            // 클라이언트의 이메일이 존재할 때 세션에 해당 이메일과 토큰 등록
-            session = request.getSession();
-            if (userInfo.get("email") != null) {
-                session.setAttribute("email", userInfo.get("email"));
-                session.setAttribute("access_Token", access_Token);
-            }
-
             // DB에 해당 유저정보가 있는지 확인한다.
             User user = userService.FindUserByEmail((String)userInfo.get("email"));
 
-            System.out.println("session : " + session.getId());
             // 유저정보가 없다면, DB > User table에 저장을 한다.
             if(user == null) {
                 UserSignUpDTO userSignUpDTO = new UserSignUpDTO();
@@ -62,10 +53,8 @@ public class OAuthController {
     @GetMapping(value = "/logout")
     public ResponseEntity<?> OAuthLogOut(@RequestHeader Map<String, String> header) {
         try {
-            // 세션에 저장한 액세스 토큰을 매개로 카카오 로그아웃을 진행하고, 세션의 키들을 지운다
+            // 헤더로 받아  액세스 토큰을 매개로 카카오 로그아웃을 진행한다.
             userService.userLogout(header.get("authorization"));
-            session.removeAttribute("access_Token");
-            session.removeAttribute("email");
 
             return ResponseEntity.ok().body(new HashMap<>() {{
                 put("userinfo", null);
@@ -79,11 +68,8 @@ public class OAuthController {
     @GetMapping(value = "/user")
     public ResponseEntity<?> getUserInfo(@RequestHeader Map<String, String> header) {
         try {
-            // 세션에 저장한 액세스 토큰을 매개로 유저 정보를 가져온다.
-//            System.out.println("session : " + session.getId());
-//            System.out.println("access : " + (String)session.getAttribute("access_Token"));
-//            HashMap<String, Object> userInfo = userService.getUserInfo((String)session.getAttribute("access_Token"));
             System.out.println("hat : " + header.get("authorization"));
+            // 헤더로 받아 온 액세스 토큰을 매개로 유저 정보를 가져온다.
             HashMap<String, Object> userInfo = userService.getUserInfo(header.get("authorization"));
             // 이메일을 통해 DB를 탐색하고 탐색한 유저의 정보를 전해준다.
             User user = userService.FindUserByEmail((String)userInfo.get("email"));
@@ -114,7 +100,7 @@ public class OAuthController {
     @PatchMapping(value = "/user")
     public ResponseEntity<?> ChangeUserInfo(@RequestHeader Map<String, String> header, @RequestBody(required = true) UserChangeInfoDTO userChangeInfoDTO) {
         try {
-            // 세션에 저장한 액세스 토큰을 매개로 유저 정보를 가져온다.
+            // 헤더로 받아 온 액세스 토큰을 매개로 유저 정보를 가져온다.
             HashMap<String, Object> userInfo = userService.getUserInfo(header.get("authorization"));
             // 이메일을 통해 DB를 탐색하고 탐색한 유저의 정보를 전해준다.
             User user = userService.FindUserByEmail((String)userInfo.get("email"));
