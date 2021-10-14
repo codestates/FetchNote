@@ -1,17 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Editor from "./ckeditor/Editor";
 import axios from "axios";
 import "../css/ckContent.css";
 import "../css/PatchWrite.css";
 
-// const Viewer = ({content}) => (
-//   <div
-//     className="ck-content"
-//     dangerouslySetInnerHTML={{ __html: content }}
-//   ></div>
-// );
-
-const PatchWrite = () => {
+const PatchWrite = (props) => {
+    const [patchId, setPatchId] = useState(props.curPatchId);
     const [bodyText, setBodyText] = useState("");
     const [titleText, setTitleText] = useState("");
     const [gameId, setGameId] = useState(1);
@@ -25,6 +19,7 @@ const PatchWrite = () => {
     }
 
     const textsend = async () => {
+        setPatchId(props.curPatchId);
         let suc = true;
 
         const postServer = async () => {
@@ -34,7 +29,7 @@ const PatchWrite = () => {
                     'Content-Type': 'application/json'
                   },
                   method: 'patch',
-                  url: 'https://localhost:8080/patches',
+                  url: 'https://localhost:8080/patches' + '/' + patchId,
                   data: {
                       gameId,
                       title: titleText,
@@ -50,15 +45,15 @@ const PatchWrite = () => {
         const resp = await postServer();
         let info = null;
         if(suc) {
-            info = await resp;
-            await console.log(info);
+            info = resp;
+            console.log(info);
         }
     }
 
     return (
       <div>
         <div id="patchWrite_header">
-            <input type="button" value="전송" id="patchWrite_send" />
+            <input type="button" value="전송" id="patchWrite_send" onClick={textsend} />
         </div>
         <div>
             <input id="patchWrite_title" type="text" onChange={getTitleText} />
@@ -77,16 +72,3 @@ const PatchWrite = () => {
   };
   
 export default PatchWrite;
-
-
-// function PatchWrite(){
-//     return(
-//         <form className="pageForm">
-//             <div className="pageForm_title">
-//                 <input type="text" placeholder="제목을 입력하세요"></input>
-//                 <textarea></textarea>
-//             </div>
-//         </form>
-//     )
-// }
-// export default PatchWrite;

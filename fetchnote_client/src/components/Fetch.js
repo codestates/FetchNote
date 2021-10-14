@@ -1,13 +1,12 @@
 import PatchnoteBlock from "./PatchnoteBlock";
 import Sidebar from "./Sidebar"
 import "../css/Fetch.css"
-import { Link } from "react-router-dom";
+import { Switch, Link, Redirect, Route } from "react-router-dom";
 import React, { useState } from "react";
 import axios from "axios";
+import PatchWrite from "./PatchWrite";
 
-function Fetch(){
-    const [patchId, setPatchId] = useState(0);
-
+function Fetch(props) {
     const writePatch = async () => {
         let suc = true;
 
@@ -32,10 +31,11 @@ function Fetch(){
         }
 
         const resp = await postPatch();
-        let info = null;
+        let id = null;
         if(suc) {
-            info = await resp;
-            await console.log(info);
+            id = await resp.data.id;
+            props.changePatchId(id);
+            console.log(props.curPatchId);
         }
     }
 
@@ -46,8 +46,7 @@ function Fetch(){
             <Sidebar></Sidebar>
             <main className="editepage">
                 <div className="editpage-link__wrapper">
-                    {/* <input type="button" className="editpage-link" value="패치 쓰기" /> */}
-                    <Link to="/write" className="editpage-link">
+                    <Link to="/write" className="editpage-link" onClick={writePatch}>
                         <span>패치 쓰기</span>
                     </Link>
                 </div>
