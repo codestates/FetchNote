@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import "../css/MyPage.css"
+import "../css/Mypage.css"
 
 function Mypage(){
     return(
@@ -32,3 +32,4 @@ function Mypage(){
        
     )
 }
+export default Mypage;

@@ -8,6 +8,7 @@ import About from "./components/About.js";
 import Fetch from "./components/Fetch.js";
 import axios from 'axios';
 import FetchNote from "./components/FetchNote.js";
+import Mypage from "./components/Mypage.js"
 
 class App extends Component {
   constructor() {
@@ -67,7 +68,9 @@ class App extends Component {
             <Route exact path="/fetchNote">
               <FetchNote/>
             </Route>
-            <Route exact path="/mypage"></Route>
+            <Route exact path="/mypage">
+              <Mypage/>
+            </Route>
           </Switch>
         </BrowserRouter>
       </div>
