@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import "../css/Block.css"
 
-function GameBlock(){
+function GameBlock(props){
     return (
         <div className="contentWrapper">
             <Link to="/patch" className="link">

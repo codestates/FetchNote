@@ -13,7 +13,7 @@ import PatchWrite from "./components/PatchWrite.js";
 
 const App = () => {
   const [isLogin,setIsLogin] = useState(false);
-  const [accessToken,setAccessToken] = useState("");
+  const [accessToken,setAccessToken] = useState(undefined);
   const [curPatchId,changePatchId] = useState(-1);
 
   useEffect(async () => {
@@ -56,14 +56,18 @@ const App = () => {
           <Route exact path="/fetchNote">
             <FetchNote
               curPatchId = {curPatchId}
+              accessToken={accessToken}
             />
           </Route>
           <Route exact path="/write">
             <PatchWrite
               curPatchId = {curPatchId}
+              accessToken={accessToken}
             />
           </Route>
-          <Route exact path="/mypage"></Route>
+          <Route exact path="/mypage">
+            <Mypage accessToken={accessToken}></Mypage>
+          </Route>
         </Switch>
       </BrowserRouter>
     </div>

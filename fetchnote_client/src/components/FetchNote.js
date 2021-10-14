@@ -8,7 +8,7 @@ import Sidebar from "./Sidebar";
 import "../css/FetchNote.css";
 import axios from "axios";
 
-function FetchNote({ curPatchId }){
+function FetchNote({ curPatchId, accessToken }){
     const [patchTitle,setPatchTitle] = useState("");
     const [patchBody,setPatchBody] = useState("");
     const [patchRight,setPatchRight] = useState(0);
@@ -44,7 +44,7 @@ function FetchNote({ curPatchId }){
 
     return (
         <div>
-            <Sidebar/>
+            <Sidebar accessToken={accessToken}/>
             <div className="patchNote">
                 <div className="petchNote_body">
                     { patchTitle === "" ? 
@@ -75,7 +75,7 @@ function FetchNote({ curPatchId }){
                     <Link to="/fetchnote">
                         <span>이전</span>
                     </Link>
-                    <Link to="/fetchnote">
+                    <Link to="/patch">
                         <span>목록</span>
                     </Link>
                     <Link to="/fetchnote">
