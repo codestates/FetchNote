@@ -15,7 +15,13 @@ class Main extends Component {
     }
 
     async getUserInfo() {
-        let res = await axios.get('https://localhost:8080/user');
+        const { accessToken }  = this.props
+        console.log(accessToken);
+        let res = await axios.get('https://localhost:8080/user', {
+            headers: {
+                authorization: accessToken
+            }
+        });
         this.setState({
           userinfo: res.data.userinfo
         })
