@@ -3,12 +3,14 @@
     position: relative;
     margin: 100px 0;
     left: 13%;
+    border-radius: 20px;
+    border: 1px solid rgb(138, 138, 138);
+    background-color: whitesmoke;
 }
 
 .petchNote_body{
-    height: 800px;
-    background-color:  rgb(212, 212, 212);
-    border: 1px solid rgb(138, 138, 138);
+    max-height: 800px;
+    background-color:  whitesmoke;
     
 }
 .petchNote_likeBtns{
@@ -32,6 +34,8 @@
 }
 .commentList_input{
     position: relative;
+    margin: 10px 0;
+    border: none;
 }
 .commentList_input input{
     box-sizing: border-box;

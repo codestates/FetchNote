@@ -27,7 +27,7 @@ nav[class="introduceMenu"] a{
 .contentList_elements .frontground{
     position: absolute;
     width: 50%;
-    height: 1542px;
+    height: 100%;
     background-color: rgba(0, 0, 0, 0.377);
 }
 #secondPage{
@@ -35,9 +35,9 @@ nav[class="introduceMenu"] a{
 }
 .contentList_elements .text{
     position: absolute;
-    color: black;
-    top: 400px;
-    left: 200px;
+    color: black;   
+    top: 30%;
+    left: 500px;
     font-size: 70px;
     height: 500px;
     text-align: left;

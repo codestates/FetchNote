@@ -1,7 +1,7 @@
 .editpage{
     position: relative;
 }
-.editpage-link{
+.editpage-link__wrapper{
     display: flex;
     justify-content: flex-end;
     align-items: center
