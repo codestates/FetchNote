@@ -16,13 +16,12 @@ const App = () => {
   const [accessToken,setAccessToken] = useState("");
   const [curPatchId,changePatchId] = useState(-1);
 
-  useEffect(() => {
+  useEffect(async () => {
     const url = new URL(window.location.href)
     const authorizationCode = url.searchParams.get('code')
     if (authorizationCode) {
       // authorization server로부터 클라이언트로 리디렉션된 경우, authorization code가 함께 전달된다.
-      setAccessToken(authorizationCode);
-      getAccessToken(accessToken);
+      await getAccessToken(authorizationCode);
     }
   },[])
 
@@ -30,9 +29,8 @@ const App = () => {
     let callbackURL = 'https://localhost:8080/oauth';
     await axios.get(callbackURL, { params: { code: authorizationCode }})
           .then(res => {
-            setIsLogin(true);
-            setAccessToken(res.data)
-          })
+            return res.data;
+          }).then(setAccessToken).then(() => setIsLogin(true))
           .catch(err => {
             console.log(err);
           });
