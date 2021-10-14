@@ -3,8 +3,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Sidebar from "./Sidebar"
 import GameBlock from "./GameBlock"
 import "../css/Main.css"
+import { useEffect } from "react";
+import axios from "axios";
 
 function Main(){
+    useEffect(()=>{
+        async function get(){
+            const input = await axios.get('https://localhost:3000/user')
+            console.log(input)
+        }
+        get();
+    },[])
     return(
         <div>
             <Sidebar/>
