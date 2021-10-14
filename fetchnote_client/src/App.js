@@ -13,7 +13,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      isLogin: false,
+      isLogin: false
     };
     this.getAccessToken = this.getAccessToken.bind(this);
   }

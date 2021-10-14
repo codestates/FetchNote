@@ -11,7 +11,7 @@ class Login extends Component {
         this.socialLoginHandler = this.socialLoginHandler.bind(this)
     
         let REST_API_KEY = 'b1439c1ca8b3431678a1c6cc28df99c6';
-        let REDIRECT_URI = 'http://localhost:3000'
+        let REDIRECT_URI = 'https://localhost:3000'
         this.KAKAO_LOGIN_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`
     }
     

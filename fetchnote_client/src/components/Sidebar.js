@@ -4,8 +4,9 @@ import {faHome} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../css/Sidebar.css";
 
-function Sidebar(){
+function Sidebar(props){
     // 좋아하는 게임 목록을 받아와 출력을 해야 한다
+    const { userinfo } = props;
     const [likeGames , SetLikeGames] = useState(1); 
     function click(){
         console.log("버튼이 눌렀습니다");
@@ -25,10 +26,10 @@ function Sidebar(){
                 </li>
                 <li className="navigationBar_list_elements userProfile">
                         <img className="user" alt="my_page" src="img/user_profile.svg"></img>
-                        <span>내 프로필</span>
+                        <span>{userinfo.nickname}</span>
                 </li>
                 <li className="navigationBar_list_elements userLevel">
-                    <span className="userLevel">100,000</span>
+                    <span className="userLevel">exp : {userinfo.exp}</span>
                 </li>
                 <li className="navigationBar_list_elements mainPage">
                     <Link to="/mypage">
