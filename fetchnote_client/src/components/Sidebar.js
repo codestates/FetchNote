@@ -45,10 +45,10 @@ function Sidebar(props){
                 </li>
                 <li className="navigationBar_list_elements userProfile">
                         <img className="user" alt="my_page" src="img/user_profile.svg"></img>
-                        <span>테스트를위한</span>
+                        <span>{userinfo.nickname}</span>
                 </li>
                 <li className="navigationBar_list_elements userLevel">
-                    <span className="userLevel">exp : 하드코딩</span>
+                    <span className="userLevel">exp : {userinfo.exp}</span>
                 </li>
                 <li className="navigationBar_list_elements mainPage">
                     <Link to="/mypage">
