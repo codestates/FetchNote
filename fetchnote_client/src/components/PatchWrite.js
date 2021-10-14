@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Editor from "./ckeditor/Editor";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import "../css/ckContent.css";
 import "../css/PatchWrite.css";
 
@@ -10,16 +11,15 @@ const PatchWrite = (props) => {
     const [titleText, setTitleText] = useState("");
     const [gameId, setGameId] = useState(1);
 
-    const textFiltering = (str) => {
-        str = str.replace(/<\/p>/g, "\n").replace(/<p>/g, "");
-    }
+    useEffect(() => {
+        setPatchId(props.curPatchId);
+    },[props])
 
     const getTitleText = (e) => {
         setTitleText(e.target.value);
     }
 
     const textsend = async () => {
-        setPatchId(props.curPatchId);
         let suc = true;
 
         const postServer = async () => {
@@ -42,16 +42,16 @@ const PatchWrite = (props) => {
             }
         }
 
-        const resp = await postServer();
-        let info = null;
-        if(suc) {
-            info = resp;
-            console.log(info);
-        }
+        await postServer().then(resp => {
+            if(suc){
+                document.getElementById("link-fetchnote").click();
+            }
+        });
     }
 
     return (
       <div>
+        <Link to="/fetchNote" id="link-fetchnote" hidden />
         <div id="patchWrite_header">
             <input type="button" value="전송" id="patchWrite_send" onClick={textsend} />
         </div>
@@ -64,7 +64,6 @@ const PatchWrite = (props) => {
             uploader="bloodseeker"
             onChange={(event, editor) => {
                 setBodyText(editor.getData());
-                console.log(bodyText);
             }}
         />
       </div>

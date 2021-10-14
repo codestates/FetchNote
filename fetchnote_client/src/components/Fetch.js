@@ -30,26 +30,25 @@ function Fetch(props) {
             }
         }
 
-        const resp = await postPatch();
-        let id = null;
-        if(suc) {
-            id = await resp.data.id;
-            props.changePatchId(id);
+        await postPatch().then(resp => {
+            props.changePatchId(resp.data.id);
+            return;
+        }).then(() => {
             console.log(props.curPatchId);
-        }
+            document.getElementById("link-patchwrite").click();
+        });
     }
 
     
 
     return(
         <div>
-            <Sidebar></Sidebar>
+            <Sidebar />
             <main className="editepage">
                 <div className="editpage-link__wrapper">
-                    <Link to="/write" className="editpage-link" onClick={writePatch}>
-                        <span>패치 쓰기</span>
-                    </Link>
+                    <Link to="/write" id="link-patchwrite" hidden />
                 </div>
+                <button className="editpage-link" onClick={writePatch}>패치 작성</button>
                 <div className="subContent_wrapper">
                     <PatchnoteBlock/>
                     <PatchnoteBlock/>

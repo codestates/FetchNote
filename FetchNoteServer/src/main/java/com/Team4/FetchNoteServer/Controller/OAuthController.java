@@ -76,7 +76,7 @@ public class OAuthController {
         }
     }
 
-    @GetMapping(value = "user")
+    @GetMapping(value = "/user")
     public ResponseEntity<?> getUserInfo() {
         try {
             // 세션에 저장한 액세스 토큰을 매개로 유저 정보를 가져온다.
@@ -109,7 +109,7 @@ public class OAuthController {
         }
     }
 
-    @PatchMapping(value = "user")
+    @PatchMapping(value = "/user")
     public ResponseEntity<?> ChangeUserInfo(@RequestBody(required = true) UserChangeInfoDTO userChangeInfoDTO) {
         try {
             // 세션에 저장한 액세스 토큰을 매개로 유저 정보를 가져온다.

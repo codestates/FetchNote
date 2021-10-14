@@ -3,7 +3,6 @@ import Login from "./components/Login.js";
 import './css/App.css';
 import React, { Component, useEffect, useState } from "react";
 import Main from "./components/Main"
-import dotenv from "dotenv";
 import About from "./components/About.js";
 import Fetch from "./components/Fetch.js";
 import axios from 'axios';
@@ -53,11 +52,13 @@ const App = () => {
             />
           </Route>
           <Route exact path="/fetchNote">
-            <FetchNote/>
+            <FetchNote
+              curPatchId = {curPatchId}
+            />
           </Route>
           <Route exact path="/write">
             <PatchWrite
-              curpatchId = {curPatchId}
+              curPatchId = {curPatchId}
             />
           </Route>
           <Route exact path="/mypage"></Route>
