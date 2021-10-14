@@ -26,6 +26,7 @@ class App extends Component {
             this.setState({
               isLogin: true
             });
+            console.log(res.data)
           })
           .catch(err => {
             console.log(err);
