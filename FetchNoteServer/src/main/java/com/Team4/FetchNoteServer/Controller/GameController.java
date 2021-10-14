@@ -74,16 +74,6 @@ public class GameController {
                 result.add(el);
             }
 
-<<<<<<< HEAD
-            return ResponseEntity.ok().body(
-                new HashMap<>(){
-                    {
-                        put("games", result);
-                        put("message", "ok");
-                    }
-                }
-            );
-=======
             try {
                 return ResponseEntity.ok().body(
                     new HashMap<>(){
@@ -96,7 +86,6 @@ public class GameController {
             } catch (Exception e) {
                 return ResponseEntity.badRequest().body(e);
             }
->>>>>>> a3849a9e042d503b66bf55b5a5c04ac58c117fb2
         }
     }
 

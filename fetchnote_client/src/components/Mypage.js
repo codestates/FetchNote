@@ -4,9 +4,56 @@ import Sidebar from "./Sidebar";
 import "../css/Mypage.css"
 import axios from "axios";
 
-function Mypage({ BASE_URL, accessToken, favGame, setFavGame }){
+function Mypage({ BASE_URL, accessToken, favGame, setFavGame, setIsLogin }){
     const history = useHistory();
     const [userinfo, setUserinfo] = useState({});
+    const [newNick,setNewNick] = useState("");
+    let vis = false;
+
+    const [r_1,reloadEffect_1] = useState(false);
+
+    const changeNick = (e) => {
+        setNewNick(e.target.value);
+    }
+
+    const switchVisible = () => {
+        if(!vis){
+            document.getElementById("change_user_nickname").style.display = "";
+            document.getElementById("change_user_nickname_send").style.display = "";
+            vis = true;
+        }else {
+            document.getElementById("change_user_nickname").style.display = "none";
+            document.getElementById("change_user_nickname_send").style.display = "none";
+            vis = false;
+        }
+    }
+
+    const sendNewNick = async () => {
+        if(newNick === "") alert("이름을 입력하세요");
+        else {
+            try {
+                return await axios({
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authorization': accessToken,
+                    },
+                    method: 'patch',
+                    url: BASE_URL + "user",
+                    data: {
+                        nickname: newNick,
+                    }
+                }).then(() => reloadEffect_1(!r_1)).then(() => {
+                    setNewNick("");
+                    document.getElementById("change_user_nickname").value = "";
+                    document.getElementById("change_user_nickname").style.display = "none";
+                    document.getElementById("change_user_nickname_send").style.display = "none";
+                    vis = false;
+                });
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    }
 
     async function getUserInfo() {
         console.log(accessToken);
@@ -30,7 +77,7 @@ function Mypage({ BASE_URL, accessToken, favGame, setFavGame }){
 
     useEffect(() => {
         getUserInfo();
-    }, []);
+    }, [r_1]);
 
     return(
         <div>
@@ -52,7 +99,9 @@ function Mypage({ BASE_URL, accessToken, favGame, setFavGame }){
                     <button onClick = {handleLogout}>로그아웃</button>
                 </div>
                 <div className="mypage_btn">
-                    <button>이름 바꾸기</button>
+                    <button onClick={switchVisible}>이름 바꾸기</button>
+                    <input type="text" id="change_user_nickname" placeholder="바꿀 이름" onChange={changeNick} style={{display: "none"}}/>
+                    <button id="change_user_nickname_send" onClick={sendNewNick} style={{display: "none"}}>변경하기</button>
                 </div>
                 <div className="mypage_link">
                     <Link to="/">전체 게임 보기</Link>
