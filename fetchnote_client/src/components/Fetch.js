@@ -17,7 +17,7 @@ function Fetch(props) {
                     'authorization': props.accessToken,
                 },
                 method: 'get',
-                url: 'https://localhost:8080/patches?gameId=' + 1,
+                url: 'https://localhost:8080/patches?gameId=' + props.curGameId,
             })
         } catch (e) {
             console.error(e);
@@ -43,7 +43,7 @@ function Fetch(props) {
                     method: 'post',
                     url: 'https://localhost:8080/patches',
                     data: {
-                        gameId : 1,
+                        gameId : props.curGameId,
                         title: "temp",
                         body: "temp"
                     }
