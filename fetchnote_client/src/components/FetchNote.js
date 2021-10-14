@@ -172,11 +172,11 @@ function FetchNote({ curPatchId, accessToken, changePatchId }){
                     )
                     : 
                     (
-                        <div>
+                        <div className="text-left text-wrapper"> 
                             <h1>{patchTitle}</h1>
-                            <div>작성자 : {patchWriter}</div>
-                            <div>경험치 : {patchWriterExp}</div>
-                            <div dangerouslySetInnerHTML={{__html: patchBody}}></div>
+                            <div className="tet-left">작성자 : {patchWriter}</div>
+                            <div className="text-left">경험치 : {patchWriterExp}</div>
+                            <div dangerouslySetInnerHTML={{__html: patchBody} } className="text-left"></div>
                         </div>
                     )}
                 </div>
