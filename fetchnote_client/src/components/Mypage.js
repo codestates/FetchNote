@@ -1,11 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import "../css/Mypage.css"
 import axios from "axios";
 
-function Mypage(props){
-    const { accessToken } = props;
+
+function Mypage({ accessToken, setIsLogin }){
+    const history = useHistory();
     const [userinfo, setUserinfo] = useState({});
 
     async function getUserInfo() {
@@ -16,6 +17,16 @@ function Mypage(props){
             }
         });
         setUserinfo(res.data.userinfo);
+    }
+
+    async function handleLogout() {
+        let res = await axios.get('https://localhost:8080/logout', {
+            headers: {
+                authorization: accessToken
+            }
+        });
+        setIsLogin(false);
+        history.push('/');
     }
 
     useEffect(() => {
@@ -35,7 +46,7 @@ function Mypage(props){
                     
                 </div>
                 <div className="mypage_btn">
-                    <button>로그아웃</button>
+                    <button onClick = {handleLogout}>로그아웃</button>
                 </div>
                 <div className="mypage_btn">
                     <button>이름 바꾸기</button>

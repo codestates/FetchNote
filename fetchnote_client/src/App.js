@@ -81,6 +81,7 @@ const App = () => {
           <Route exact path="/mypage">
             <Mypage
               accessToken={accessToken}
+              setIsLogin={setIsLogin}
             />
           </Route>
         </Switch>
