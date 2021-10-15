@@ -5,6 +5,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### misc ###
 .DS_Store
 .env.local
 .env.development.local
@@ -31,6 +32,7 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+!**/src/main/resources/localhost.p12
 
 ### NetBeans ###
 /nbproject/private/
@@ -41,3 +43,5 @@ out/
 
 ### VS Code ###
 .vscode/
+/src/main/resources/localhost.p12
+/src/main/resources/application.properties

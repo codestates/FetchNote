@@ -19,7 +19,6 @@ nav{
     position: fixed;
 }
 .navigationBar{
-    
     top: 0;
     left: 50px;
     height: 100%;
@@ -59,6 +58,11 @@ nav{
 .userProfile span{
     margin-top: 8px;
 }
+
+.mainPage path{
+    fill: black;
+}
+
 .mainPage::after{
     content: "";
     display: block;
