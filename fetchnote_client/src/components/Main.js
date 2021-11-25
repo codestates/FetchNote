@@ -26,6 +26,24 @@ const Main = (props) => {
         }
     }
 
+    const addFavGame = async (id) => {
+        try {
+            return await axios({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': props.accessToken,
+                },
+                method: 'post',
+                url: props.BASE_URL + "game",
+                data: {
+                    gameId: id,
+                }
+            })
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     useEffect(() => {
         async function fetchGame () {
             await getGames().then(resp => setGames(resp.data.games));
@@ -35,7 +53,12 @@ const Main = (props) => {
         
     return(
     <div>
-        <Sidebar accessToken={props.accessToken}/>
+        <Sidebar
+            accessToken={props.accessToken}
+            favGame={props.favGame}
+            setFavGame={props.setFavGame}
+            changeGameId={props.changeGameId}
+        />
         <main>
             <div className="wrapper">
                 <div className="searchBox">
@@ -55,6 +78,7 @@ const Main = (props) => {
                                 key={idx + 900}
                                 info={el}
                                 changeGameId={props.changeGameId}
+                                addFavGame={addFavGame}
                             />
                         )
                     })

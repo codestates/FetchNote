@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -28,12 +29,13 @@ public class ImageController {
     private final static String S3_DIR = "static";
 
     @PostMapping("/image")
-    public ResponseEntity<?> UploadImage(HttpServletRequest data,
-                                      @RequestPart(value = "upload") MultipartFile imageblob){
+    public ResponseEntity<?> UploadImage(@RequestHeader("patchId") String header,
+                                         @RequestPart(value = "upload") MultipartFile imageblob){
 
         try {
+            long patchId = Long.parseLong(header);
             ImageDTO dto = new ImageDTO();
-            dto.setPatchId(21L);
+            dto.setPatchId(patchId);
             dto.setImagename(imageblob.getOriginalFilename());
             dto.setImagetype(imageblob.getContentType());
 
@@ -50,6 +52,12 @@ public class ImageController {
                             put("URL", url);
                         }
                     });
+        } catch (NullPointerException e) {
+            return ResponseEntity.badRequest().body(new HashMap<>(){
+                {
+                    put("message", "can not find patchId");
+                }
+            });
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e);
         }

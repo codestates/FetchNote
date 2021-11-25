@@ -1,21 +1,46 @@
 .contentWrapper{
     position: relative;
     box-sizing: border-box;
-    width: 800px;
+    width: 400px;
 }
+
+.contentWrapper:hover{
+    cursor: pointer;
+    opacity: 0.8;
+}
+
 .favorite{
     padding: 0;
-    position: absolute;
     color: blue;
-    top: -471px;
-    right: 0;
     border: 0;
     background-color: rgba(255, 255, 240, 0);
 }
+
+.favorite:hover{
+    cursor: pointer;
+    color: red;
+}
+
 .link{
     position: relative;
 }
 
 .color-change{
     color: yellow;
+}
+
+.thumbnail{
+    width: inherit;
+    height: inherit;
+    background-color: rgb(87, 87, 87);
+    z-index: 1;
+}
+
+.thumbnail img{
+    z-index: 0;
+}
+
+.favorite{
+    position: relative;
+    color: blue;
 }

@@ -58,9 +58,11 @@ nav{
 .userProfile span{
     margin-top: 8px;
 }
+
 .mainPage path{
     fill: black;
 }
+
 .mainPage::after{
     content: "";
     display: block;

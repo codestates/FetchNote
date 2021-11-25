@@ -1,6 +1,7 @@
 class UploadAdapter {
-  constructor(loader) {
+  constructor(loader,uploader) {
       this.loader = loader;
+      this.uploader = uploader;
   }
 
   upload() {
@@ -12,8 +13,10 @@ class UploadAdapter {
   }
 
   _initRequest() {
+      const uploader = this.uploader;
       const xhr = this.xhr = new XMLHttpRequest();
       xhr.open('POST', 'https://localhost:8080/image', true);
+      xhr.setRequestHeader("patchId" , String(uploader));
       xhr.responseType = 'json';
   }
 
