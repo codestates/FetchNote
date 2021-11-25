@@ -20,13 +20,34 @@ function Mypage({ accessToken, setIsLogin }){
     }
 
     async function handleLogout() {
-        let res = await axios.get('https://localhost:8080/logout', {
+        try{
+            return await axios.patch({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': accessToken,
+                },
+                method: 'patch',
+                url: 'https://localhost:8080/user',
+                data:{
+                    nickname: "컵아"
+                }
+            })
+        }catch(e) {
+            console.log(e)
+        }
+        
+    }
+
+    async function handleChangeNickname(){
+
+        let res = await axios.patch('https://localhost:8080/user',{
             headers: {
                 authorization: accessToken
+            },
+            data: {
+                nickname : '컵아'
             }
         });
-        setIsLogin(false);
-        history.push('/');
     }
 
     useEffect(() => {
@@ -49,7 +70,7 @@ function Mypage({ accessToken, setIsLogin }){
                     <button onClick = {handleLogout}>로그아웃</button>
                 </div>
                 <div className="mypage_btn">
-                    <button>이름 바꾸기</button>
+                    <button onClick = {handleChangeNickname}>이름 바꾸기</button>
                 </div>
                 <div className="mypage_link">
                     <Link to="/">전체 게임 보기</Link>
