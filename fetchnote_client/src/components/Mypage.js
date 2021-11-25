@@ -66,13 +66,34 @@ function Mypage({ BASE_URL, accessToken, favGame, setFavGame, setIsLogin }){
     }
 
     async function handleLogout() {
-        let res = await axios.get('https://localhost:8080/logout', {
+        try{
+            return await axios.patch({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': accessToken,
+                },
+                method: 'patch',
+                url: 'https://localhost:8080/user',
+                data:{
+                    nickname: "컵아"
+                }
+            })
+        }catch(e) {
+            console.log(e)
+        }
+        
+    }
+
+    async function handleChangeNickname(){
+
+        let res = await axios.patch('https://localhost:8080/user',{
             headers: {
                 authorization: accessToken
+            },
+            data: {
+                nickname : '컵아'
             }
         });
-        setIsLogin(false);
-        history.push('/');
     }
 
     useEffect(() => {
