@@ -67,7 +67,7 @@ public class UserService {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
-            sb.append("&client_id=b1439c1ca8b3431678a1c6cc28df99c6");
+            sb.append("&client_id=[KAKAO_REST_API_KEY]");
             sb.append("&redirect_uri=https://localhost:3000");
             sb.append("&code=" + authorize_code);
             bw.write(sb.toString());
